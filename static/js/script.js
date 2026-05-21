@@ -13,12 +13,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const errorToast = document.getElementById('error-toast');
     const errorMessage = document.getElementById('error-message');
     
-    // Channel Image Elements
+
     const channelR = document.getElementById('channel-r');
     const channelG = document.getElementById('channel-g');
     const channelB = document.getElementById('channel-b');
     
-    // Matrix Elements
+
     const matrixTabs = document.querySelectorAll('.matrix-tab');
     const matrixTable = document.getElementById('matrix-table');
     
@@ -105,7 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
         dropZone.style.display = 'block';
         resultsContainer.style.display = 'block';
 
-        // 1. Identifikasi
+
         previewImg.src = data.image_url;
         statType.textContent = data.type;
         statReason.textContent = data.reason;
@@ -123,7 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
         statResolution.textContent = data.resolution;
         statPixels.textContent = data.total_pixels.toLocaleString();
 
-        // 2. Channel RGB & Stats
+
         channelR.src = data.channels.r;
         channelG.src = data.channels.g;
         channelB.src = data.channels.b;
@@ -144,15 +144,15 @@ document.addEventListener('DOMContentLoaded', () => {
             </tr>
         `;
 
-        // 3. Matrix Representation
+
         currentMatrixData = data.matrix;
-        renderMatrix('r'); // Default to red
+        renderMatrix('r');
         
-        // 4. Histogram Chart
+
         renderChart(data.histogram);
     }
     
-    // Matrix Tabs Event Listeners
+
     matrixTabs.forEach(tab => {
         tab.addEventListener('click', (e) => {
             matrixTabs.forEach(t => t.classList.remove('active'));
@@ -167,7 +167,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const matrix = currentMatrixData[channel];
         matrixTable.innerHTML = '';
         
-        // Determine base color based on channel
+
         let rgbBase = '';
         if (channel === 'r') rgbBase = '255, 0, 0';
         else if (channel === 'g') rgbBase = '0, 255, 0';
@@ -179,8 +179,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const td = document.createElement('td');
                 td.textContent = val;
                 
-                // Opacity based on value (0-255) to create heatmap effect
-                // Minimum opacity 0.1 so text is always slightly visible
+
                 const opacity = Math.max(0.1, val / 255);
                 td.style.backgroundColor = `rgba(${rgbBase}, ${opacity})`;
                 
@@ -294,7 +293,7 @@ document.addEventListener('DOMContentLoaded', () => {
         fileInput.value = '';
     }
 
-    // Math Background Animation
+
     const canvas = document.getElementById('math-bg');
     if (canvas) {
         const ctx = canvas.getContext('2d');
@@ -313,7 +312,7 @@ document.addEventListener('DOMContentLoaded', () => {
         class MathParticle {
             constructor() {
                 this.reset();
-                this.y = Math.random() * height; // initial random spread
+                this.y = Math.random() * height;
             }
             
             reset() {
