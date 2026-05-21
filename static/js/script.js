@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     let rgbChart = null;
 
-    // Drag & Drop Handlers
+
     ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
         dropZone.addEventListener(eventName, preventDefaults, false);
     });
@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function uploadImage(file) {
-        // UI Updates
+
         dropZone.style.display = 'none';
         loadingState.style.display = 'block';
         resultsContainer.style.display = 'none';
@@ -90,18 +90,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function displayResults(data) {
-        // Hide loading, show results
         loadingState.style.display = 'none';
-        dropZone.style.display = 'block'; // Allow another upload
+        dropZone.style.display = 'block';
         resultsContainer.style.display = 'block';
 
-        // Update Stats
+
         previewImg.src = data.image_url;
         statType.textContent = data.type;
         
-        // Dynamic coloring for type
         if (data.type === 'Grayscale Image') {
-            statType.style.color = '#a0a0b0'; // gray
+            statType.style.color = '#a0a0b0';
             statType.style.textShadow = '0 0 10px rgba(160, 160, 176, 0.3)';
         } else {
             statType.style.color = 'var(--accent-blue)';
@@ -112,7 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
         statResolution.textContent = data.resolution;
         statPixels.textContent = data.total_pixels.toLocaleString();
 
-        // Render Chart
+
         renderChart(data.histogram);
     }
 
@@ -179,7 +177,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                     },
                     tooltip: {
-                        enabled: false // disable tooltips for performance on 256 points
+                        enabled: false
                     }
                 },
                 scales: {

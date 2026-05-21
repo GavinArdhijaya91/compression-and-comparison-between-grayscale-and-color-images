@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Linear Algebra Image Analysis</title>
+    <title>Comparison Between Grayscale and Color Images</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -16,12 +16,12 @@
 
     <div class="container">
         <header>
-            <h1>Linear Algebra <span>Image Classification</span></h1>
+            <h1>Comparison Between <span>Grayscale & Color Images</span></h1>
             <p>Analyze and compare grayscale vs color images using digital image processing and matrix transformations.</p>
         </header>
 
         <main>
-            <!-- Upload Section -->
+
             <section class="glass-card upload-section" id="upload-section">
                 <div class="upload-area" id="drop-zone">
                     <input type="file" id="file-input" accept="image/png, image/jpeg, image/jpg" hidden>
@@ -39,10 +39,10 @@
                 </div>
             </section>
 
-            <!-- Results Section (Initially Hidden) -->
+
             <section class="results-container" id="results-container" style="display: none;">
                 <div class="grid-layout">
-                    <!-- Image Preview & Stats -->
+
                     <div class="glass-card preview-card">
                         <h2 class="card-title">Image Analysis</h2>
                         <div class="image-preview">
@@ -68,7 +68,7 @@
                         </div>
                     </div>
 
-                    <!-- Histogram Chart -->
+
                     <div class="glass-card chart-card">
                         <h2 class="card-title">RGB Histogram</h2>
                         <div class="chart-container">
@@ -81,7 +81,7 @@
                 </div>
             </section>
 
-            <!-- Educational Section -->
+
             <section class="glass-card education-section">
                 <h2 class="card-title">Linear Algebra Behind the Scenes</h2>
                 
@@ -110,7 +110,7 @@ Red   = [255,   0,   0]</code></pre>
         </main>
     </div>
 
-    <!-- Error Toast -->
+
     <div id="error-toast" class="toast hidden">
         <p id="error-message">An error occurred.</p>
     </div>

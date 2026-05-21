@@ -7,11 +7,10 @@ import uuid
 
 app = Flask(__name__)
 
-# Configure upload folder
 UPLOAD_FOLDER = 'static/uploads'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['MAX_CONTENT_LENGTH'] = 10 * 1024 * 1024  # 10MB limit
+app.config['MAX_CONTENT_LENGTH'] = 10 * 1024 * 1024
 
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
@@ -33,48 +32,39 @@ def analyze_image():
         return jsonify({'error': 'No selected file'}), 400
     
     if file and allowed_file(file.filename):
-        # Save file with unique name
-        ext = file.filename.rsplit('.', 1)[1].lower()
-        unique_filename = f"{uuid.uuid4().hex}.{ext}"
-        filepath = os.path.join(app.config['UPLOAD_FOLDER'], unique_filename)
-        file.save(filepath)
-        
         try:
-            # Process image
-            # OpenCV reads in BGR format
-            img_bgr = cv2.imread(filepath)
+            in_memory_file = file.read()
+            nparr = np.frombuffer(in_memory_file, np.uint8)
+            img_bgr = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+            
             if img_bgr is None:
                 return jsonify({'error': 'Invalid or corrupted image file'}), 400
                 
             img_rgb = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2RGB)
             
-            # Dimensions
             h, w, c = img_rgb.shape
             total_pixels = h * w
             
-            # Grayscale Analysis
-            # Calculate standard deviation across RGB channels for each pixel
-            # A pixel with R=G=B will have std dev = 0
             std_dev = np.std(img_rgb, axis=2)
             mean_std_dev = np.mean(std_dev)
             
-            # Max possible standard deviation is for [255, 0, 0] which is ~120.2
             max_possible_std_dev = np.std([255, 0, 0])
             similarity = max(0, 100 - (mean_std_dev / max_possible_std_dev * 100))
             
-            # Determine type
             threshold = 95.0
             if similarity >= threshold:
                 img_type = "Grayscale Image"
             else:
                 img_type = "Colored Image"
                 
-            # Generate Histograms
             hist_r = cv2.calcHist([img_rgb], [0], None, [256], [0, 256]).flatten().tolist()
             hist_g = cv2.calcHist([img_rgb], [1], None, [256], [0, 256]).flatten().tolist()
             hist_b = cv2.calcHist([img_rgb], [2], None, [256], [0, 256]).flatten().tolist()
             
-            image_url = url_for('static', filename=f'uploads/{unique_filename}')
+            import base64
+            encoded_img = base64.b64encode(in_memory_file).decode('utf-8')
+            mime_type = file.mimetype if file.mimetype else 'image/jpeg'
+            image_url = f"data:{mime_type};base64,{encoded_img}"
             
             return jsonify({
                 'success': True,
