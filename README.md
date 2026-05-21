@@ -1,7 +1,7 @@
 # Comparison Between Grayscale and Color Images
 
 [![Live Preview on Vercel](https://img.shields.io/badge/Live_Preview-Vercel-black?style=for-the-badge&logo=vercel)](https://comparison-between-grayscale-and-co.vercel.app/)
-[![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://share.streamlit.io/)
+[![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://comparison-between-grayscale-and-color-images-mrhss5zmjrckjzid.streamlit.app/)
 [![Deploy to Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/GavinArdhijaya91/comparison-between-grayscale-and-color-images)
 
 ## 📖 Deskripsi
