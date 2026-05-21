@@ -7,7 +7,7 @@
   <meta name="description" content="Analisis gambar berwarna vs grayscale menggunakan representasi matriks RGB dan HSV color space." />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Sora:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
   <style>
-    /* ─── DESIGN TOKENS ─────────────────────────────────────────────── */
+    
     :root {
       --bg:       #0d0f14;
       --surface:  #13161e;
@@ -39,7 +39,7 @@
       --shadow:  0 2px 20px rgba(0,0,0,0.08);
     }
 
-    /* ─── RESET ──────────────────────────────────────────────────────── */
+    
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
     body {
@@ -53,14 +53,14 @@
     img { display: block; max-width: 100%; }
     a { color: inherit; text-decoration: none; }
 
-    /* ─── CANVAS BG ─────────────────────────────────────────────────── */
+    
     #math-bg {
       position: fixed; inset: 0; z-index: 0;
       pointer-events: none; opacity: 0.5;
     }
     [data-theme="light"] #math-bg { opacity: 0.55; }
 
-    /* ─── NAVBAR ─────────────────────────────────────────────────────── */
+    
     .navbar {
       position: fixed; top: 0; left: 0; right: 0; z-index: 200;
       display: flex; align-items: center; justify-content: space-between;
@@ -97,7 +97,7 @@
     }
     .btn-nav:hover { background: var(--border); transform: translateY(-1px); }
 
-    /* ─── SCROLL ANIMATION SETUP ─────────────────────────────────────── */
+    
     .reveal {
       opacity: 0; transform: translateY(32px);
       transition: opacity 0.7s ease, transform 0.7s ease;
@@ -113,7 +113,7 @@
     .reveal.delay-4 { transition-delay: 0.4s; }
     .reveal.delay-5 { transition-delay: 0.5s; }
 
-    /* ─── HERO ───────────────────────────────────────────────────────── */
+    
     .hero-section {
       min-height: 100vh; position: relative; z-index: 1;
       display: flex; align-items: center;
@@ -207,7 +207,7 @@
       font-size: 0.72rem; font-weight: 700;
     }
 
-    /* ─── STAT BAR ───────────────────────────────────────────────────── */
+    
     .stat-bar {
       border-top: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
@@ -228,7 +228,7 @@
     .stat-num span { color: var(--accent); }
     .stat-desc { font-size: 0.82rem; color: var(--muted); font-weight: 400; }
 
-    /* ─── SECTION WRAPPER ────────────────────────────────────────────── */
+    
     .section {
       max-width: 1100px; margin: 0 auto;
       padding: 6rem 2.5rem; position: relative; z-index: 1;
@@ -254,7 +254,7 @@
       max-width: 1100px; margin: 0 auto;
     }
 
-    /* ─── HOW IT WORKS ───────────────────────────────────────────────── */
+    
     .steps-grid {
       display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;
     }
@@ -288,7 +288,7 @@
       padding: 0.18rem 0.5rem; margin-bottom: 0.75rem;
     }
 
-    /* ─── FEATURE SPLIT ──────────────────────────────────────────────── */
+    
     .split {
       display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
     }
@@ -325,7 +325,7 @@
     .feat-text strong { font-weight: 600; font-size: 0.88rem; }
     .feat-text p { font-size: 0.8rem; color: var(--muted); margin-top: 0.2rem; }
 
-    /* ─── TECH SECTION ───────────────────────────────────────────────── */
+    
     .tech-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
     .tech-card {
       background: var(--surface); border: 1px solid var(--border);
@@ -340,7 +340,7 @@
     }
     .tech-desc { font-size: 0.78rem; color: var(--muted); }
 
-    /* ─── UPLOAD SECTION ─────────────────────────────────────────────── */
+    
     .upload-wrap {
       background: var(--surface); border: 1px solid var(--border);
       border-radius: var(--radius); overflow: hidden;
@@ -387,7 +387,7 @@
     }
     .btn-secondary:hover { background: var(--card); color: var(--text); border-color: var(--dim); }
 
-    /* ─── LOADING ─────────────────────────────────────────────────────── */
+    
     .loading-bar-wrap { display: none; padding: 2rem; text-align: center; }
     .loading-bar-wrap.show { display: block; }
     .loading-ring {
@@ -398,7 +398,7 @@
     @keyframes spin { to { transform: rotate(360deg); } }
     .loading-label { font-size: 0.88rem; color: var(--muted); }
 
-    /* ─── RESULTS ─────────────────────────────────────────────────────── */
+    
     #results { display: none; animation: fadeUp 0.55s ease; }
     #results.show { display: block; }
     @keyframes fadeUp {
@@ -406,7 +406,7 @@
       to   { opacity: 1; transform: translateY(0); }
     }
 
-    /* ─── SECTION CARD ────────────────────────────────────────────────── */
+    
     .r-card {
       background: var(--surface); border: 1px solid var(--border);
       border-radius: var(--radius); margin-bottom: 1.5rem;
@@ -427,7 +427,7 @@
     }
     .r-card-body { padding: 1.75rem; }
 
-    /* ─── IDENTIFICATION ──────────────────────────────────────────────── */
+    
     .id-badge-large {
       font-family: 'Sora', sans-serif; font-size: 2.5rem; font-weight: 900;
       letter-spacing: -0.03em; border-radius: var(--radius-sm);
@@ -457,7 +457,7 @@
       font-weight: 700;
     }
 
-    /* ─── COMPARE ────────────────────────────────────────────────────── */
+    
     .compare-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
     .compare-item { text-align: center; }
     .compare-item img {
@@ -468,7 +468,7 @@
       margin-top: 0.6rem; font-size: 0.82rem; color: var(--muted); font-weight: 600;
     }
 
-    /* ─── CHANNELS ───────────────────────────────────────────────────── */
+    
     .ch-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
     .ch-card {
       background: var(--card); border: 1px solid var(--border);
@@ -497,7 +497,7 @@
     }
     .ch-hist { width: 100%; border-radius: 5px; }
 
-    /* ─── CHARTS 2×2 ─────────────────────────────────────────────────── */
+    
     .chart-2x2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
     .chart-tile {
       background: var(--card); border: 1px solid var(--border);
@@ -509,7 +509,7 @@
     }
     .chart-tile img { width: 100%; border-radius: 5px; }
 
-    /* ─── MATRIX ─────────────────────────────────────────────────────── */
+    
     .tab-row { display: flex; gap: 0.45rem; margin-bottom: 1rem; flex-wrap: wrap; }
     .tab-btn {
       background: var(--card); border: 1px solid var(--border);
@@ -533,7 +533,7 @@
       color: #fff; padding: 1px; border: 1px solid rgba(255,255,255,0.03);
     }
 
-    /* ─── GRAYSCALE SECTION ──────────────────────────────────────────── */
+    
     .toggle-row { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem; }
     .toggle-switch { position: relative; display: inline-block; width: 44px; height: 24px; }
     .toggle-switch input { opacity: 0; width: 0; height: 0; }
@@ -567,7 +567,7 @@
     }
     .gray-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-top: 1.5rem; }
 
-    /* ─── FOOTER ─────────────────────────────────────────────────────── */
+    
     .footer {
       border-top: 1px solid var(--border); background: var(--surface);
       position: relative; z-index: 1;
@@ -589,7 +589,7 @@
       border-radius: 4px; padding: 0.2rem 0.55rem; color: var(--muted);
     }
 
-    /* ─── TOAST ──────────────────────────────────────────────────────── */
+    
     .toast {
       position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 9999;
       background: var(--danger); color: #fff; border-radius: var(--radius-sm);
@@ -601,15 +601,9 @@
     }
     .toast.show { transform: translateY(0); opacity: 1; }
 
-    /* ═══════════════════════════════════════════════════════════════════
-       RESPONSIVE — 4 BREAKPOINTS
-       1. Tablet      max-width: 1024px
-       2. Phablet     max-width: 900px
-       3. Mobile      max-width: 600px
-       4. Small       max-width: 400px
-    ═══════════════════════════════════════════════════════════════════ */
+    
 
-    /* ── 1. TABLET (≤1024px) ────────────────────────────────────────── */
+    
     @media (max-width: 1024px) {
       .hero { gap: 2.5rem; }
       .hero-title { font-size: clamp(2.2rem, 4vw, 4rem); }
@@ -619,9 +613,9 @@
       .section { padding: 5rem 2rem; }
     }
 
-    /* ── 2. PHABLET (≤900px) ────────────────────────────────────────── */
+    
     @media (max-width: 900px) {
-      /* Hero: single column, hide image */
+      
       .hero {
         grid-template-columns: 1fr;
         padding: 100px 1.75rem 60px;
@@ -632,52 +626,52 @@
       .hero-desc { font-size: 0.95rem; }
       .hero-scroll { margin-top: 2rem; }
 
-      /* Stat bar: 2 columns */
+      
       .stat-bar-inner { grid-template-columns: 1fr 1fr; }
       .stat-item:nth-child(2) { border-right: none; }
       .stat-item:nth-child(3) { border-right: 1px solid var(--border); }
       .stat-item:nth-child(3),
       .stat-item:nth-child(4) { border-top: 1px solid var(--border); }
 
-      /* Sections */
+      
       .section { padding: 4rem 1.75rem; }
       .section-title { font-size: clamp(1.6rem, 4vw, 2.2rem); }
       .section-desc { font-size: 0.9rem; margin-bottom: 2rem; }
 
-      /* Steps: 1 column */
+      
       .steps-grid { grid-template-columns: 1fr; gap: 1rem; }
       .step-card::before { font-size: 3rem; }
 
-      /* Split: 1 column, no RTL trick */
+      
       .split { grid-template-columns: 1fr; gap: 2rem; }
       .split.reverse { direction: ltr; }
       .split-accent-img { display: none; }
 
-      /* Tech: 2 col */
+      
       .tech-grid { grid-template-columns: 1fr 1fr; }
 
-      /* Results */
+      
       .id-stats { grid-template-columns: 1fr 1fr; }
       .compare-2 { grid-template-columns: 1fr; gap: 1rem; }
       .ch-3 { grid-template-columns: 1fr; gap: 1rem; }
       .chart-2x2 { grid-template-columns: 1fr; gap: 1rem; }
       .gray-2col { grid-template-columns: 1fr; gap: 1rem; }
 
-      /* Upload */
+      
       .upload-header-band { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
 
-      /* Footer */
+      
       .footer-inner { flex-direction: column; align-items: flex-start; gap: 1rem; }
     }
 
-    /* ── 3. MOBILE (≤600px) ─────────────────────────────────────────── */
+    
     @media (max-width: 600px) {
-      /* Navbar */
+      
       .navbar { padding: 0 1rem; height: 56px; }
       .nav-name { font-size: 0.88rem; }
       .btn-nav { padding: 0.3rem 0.6rem; font-size: 0.75rem; }
 
-      /* Hero */
+      
       .hero { padding: 88px 1.25rem 50px; }
       .hero-eyebrow { font-size: 0.68rem; padding: 0.28rem 0.65rem; }
       .hero-title { font-size: clamp(1.8rem, 7vw, 2.4rem); line-height: 1.1; }
@@ -687,35 +681,35 @@
       .hero-cta { gap: 0.65rem; }
       .hero-scroll { font-size: 0.7rem; }
 
-      /* Stat bar: 2 columns */
+      
       .stat-bar-inner { grid-template-columns: 1fr 1fr; }
       .stat-num { font-size: 1.6rem; }
       .stat-desc { font-size: 0.75rem; }
       .stat-item { padding: 1.25rem 1rem; }
 
-      /* Sections */
+      
       .section { padding: 3.5rem 1.25rem; }
       .section-tag { font-size: 0.68rem; }
       .section-title { font-size: clamp(1.5rem, 5.5vw, 2rem); }
       .section-desc { font-size: 0.88rem; }
 
-      /* Step cards */
+      
       .step-card { padding: 1.5rem; }
       .step-title { font-size: 1rem; }
       .step-desc { font-size: 0.82rem; }
 
-      /* Feature list */
+      
       .feat-text strong { font-size: 0.82rem; }
       .feat-text p { font-size: 0.75rem; }
 
-      /* Tech grid */
+      
       .tech-grid { grid-template-columns: 1fr 1fr; gap: 0.75rem; }
       .tech-card { padding: 1.1rem; }
       .tech-icon { font-size: 1.5rem; }
       .tech-name { font-size: 0.78rem; }
       .tech-desc { font-size: 0.72rem; }
 
-      /* Upload area */
+      
       .upload-body { padding: 1.25rem; }
       .drop-zone { padding: 2.5rem 1rem; }
       .drop-title { font-size: 0.9rem; }
@@ -723,77 +717,77 @@
       .upload-header-band { padding: 1.1rem 1.25rem; }
       .upload-header-band h2 { font-size: 1rem; }
       .upload-header-band p { font-size: 0.75rem; }
-      .footer-stack { display: none; } /* hide tech pills in upload header on mobile */
+      .footer-stack { display: none; } 
 
-      /* Result cards */
+      
       .r-card-head { padding: 1rem 1.25rem; }
       .r-sec-title { font-size: 0.92rem; }
       .r-card-body { padding: 1.25rem; }
 
-      /* Identification */
+      
       .id-badge-large { font-size: 1.8rem; padding: 0.4rem 1.1rem; }
       .id-stats { grid-template-columns: 1fr 1fr; gap: 0.65rem; }
       .id-stat .k { font-size: 0.68rem; }
       .id-stat .v { font-size: 0.92rem; }
 
-      /* Channel cards */
+      
       .ch-label { font-size: 0.78rem; }
       .ch-stat-cell { font-size: 0.7rem; }
 
-      /* Matrix */
+      
       .tab-row { gap: 0.35rem; }
       .tab-btn { padding: 0.3rem 0.75rem; font-size: 0.72rem; }
       .matrix-tbl td { width: 22px; height: 22px; font-size: 0.48rem; }
 
-      /* Formula box */
+      
       .formula-eq { font-size: 0.82rem; }
       .formula-band { flex-direction: column; gap: 0.5rem; }
 
-      /* Footer */
+      
       .footer-inner { padding: 2rem 1.25rem; }
       .footer-brand { font-size: 0.95rem; }
       .footer-note { font-size: 0.75rem; }
     }
 
-    /* ── 4. SMALL MOBILE (≤400px) ───────────────────────────────────── */
+    
     @media (max-width: 400px) {
-      /* Navbar: hide brand name, keep logo */
+      
       .nav-name { display: none; }
       .navbar { padding: 0 0.85rem; }
 
-      /* Hero: even smaller */
+      
       .hero { padding: 80px 1rem 40px; }
       .hero-title { font-size: 1.75rem; }
-      .hero-desc { display: none; } /* hide description, keep CTA visible */
+      .hero-desc { display: none; } 
 
-      /* Stat bar: full-width single column */
+      
       .stat-bar-inner { grid-template-columns: 1fr; }
       .stat-item { border-right: none !important; border-top: none !important;
                    border-bottom: 1px solid var(--border); padding: 1rem; }
       .stat-item:last-child { border-bottom: none; }
 
-      /* Tech: still 2 col but tighter */
+      
       .tech-grid { grid-template-columns: 1fr 1fr; gap: 0.6rem; }
       .tech-card { padding: 0.85rem 0.6rem; }
       .tech-icon { font-size: 1.3rem; margin-bottom: 0.5rem; }
 
-      /* ID badge */
+      
       .id-badge-large { font-size: 1.5rem; padding: 0.35rem 0.9rem; }
       .id-stats { grid-template-columns: 1fr 1fr; gap: 0.5rem; }
       .id-stat { padding: 0.65rem 0.75rem; }
 
-      /* Matrix: smaller cells on tiny screen */
+      
       .matrix-tbl td { width: 18px; height: 18px; font-size: 0.42rem; }
       .matrix-scroll { max-height: 260px; }
 
-      /* Section */
+      
       .section { padding: 3rem 1rem; }
 
-      /* Step card */
+      
       .step-card { padding: 1.25rem; }
       .step-img { aspect-ratio: 16/9; }
 
-      /* Drop zone */
+      
       .drop-zone { padding: 2rem 0.85rem; }
       .drop-icon { font-size: 2rem; margin-bottom: 0.5rem; }
     }
@@ -804,7 +798,7 @@
 
   <canvas id="math-bg"></canvas>
 
-  <!-- ════ NAVBAR ════ -->
+  
   <nav class="navbar">
     <div class="nav-brand">
       <div class="nav-logo">🔬</div>
@@ -821,10 +815,10 @@
     </div>
   </nav>
 
-  <!-- ════ HERO ════ -->
+  
   <section class="hero-section">
     <div class="hero">
-      <!-- Left: text content -->
+      
       <div class="hero-content">
         <div class="hero-eyebrow reveal" data-i18n="hero.eyebrow">Linear Algebra · HSV Color Space · Matrix Analysis</div>
         <h1 class="hero-title reveal delay-1">
@@ -849,7 +843,7 @@
         <div class="hero-scroll reveal delay-4" data-i18n="hero.scroll">scroll to explore</div>
       </div>
 
-      <!-- Right: image block -->
+      
       <div class="hero-img-block reveal from-right delay-2">
         <div class="hero-img-stack">
           <img class="hero-img-main" src="https://picsum.photos/seed/matrix42/600/450" alt="Sample analysis" />
@@ -866,7 +860,7 @@
     </div>
   </section>
 
-  <!-- ════ STAT BAR ════ -->
+  
   <div class="stat-bar">
     <div class="stat-bar-inner">
       <div class="stat-item reveal">
@@ -890,7 +884,7 @@
 
   <hr class="divider" />
 
-  <!-- ════ HOW IT WORKS ════ -->
+  
   <section class="section" id="how-it-works">
     <div class="section-tag reveal" data-i18n="how.tag">How It Works</div>
     <h2 class="section-title reveal delay-1">
@@ -924,7 +918,7 @@
 
   <hr class="divider" />
 
-  <!-- ════ SPLIT — METHOD ════ -->
+  
   <section class="section">
     <div class="split">
       <div class="split-img reveal from-left">
@@ -968,7 +962,7 @@
 
   <hr class="divider" />
 
-  <!-- ════ SPLIT — MATRIX ════ -->
+  
   <section class="section">
     <div class="split reverse">
       <div class="split-content reveal from-left delay-1">
@@ -1013,7 +1007,7 @@
 
   <hr class="divider" />
 
-  <!-- ════ TECH STACK ════ -->
+  
   <section class="section">
     <div style="text-align:center; max-width: 640px; margin: 0 auto 3rem;">
       <div class="section-tag reveal" data-i18n="tech.tag">Tech Stack</div>
@@ -1045,7 +1039,7 @@
 
   <hr class="divider" />
 
-  <!-- ════ UPLOAD SECTION ════ -->
+  
   <section class="section" id="upload-section">
     <div class="section-tag reveal" data-i18n="upload.tag">Try It Now</div>
     <h2 class="section-title reveal delay-1">
@@ -1086,16 +1080,16 @@
       </div>
     </div>
 
-    <!-- Loading -->
+    
     <div class="loading-bar-wrap" id="loading">
       <div class="loading-ring"></div>
       <div class="loading-label" data-i18n="loading.text">Analyzing image, generating charts...</div>
     </div>
 
-    <!-- Results -->
+    
     <div id="results">
 
-      <!-- S01 -->
+      
       <div class="r-card">
         <div class="r-card-head">
           <span class="r-sec-num">01</span>
@@ -1113,7 +1107,7 @@
         </div>
       </div>
 
-      <!-- S02 -->
+      
       <div class="r-card">
         <div class="r-card-head">
           <span class="r-sec-num">02</span>
@@ -1133,7 +1127,7 @@
         </div>
       </div>
 
-      <!-- S03 -->
+      
       <div class="r-card">
         <div class="r-card-head">
           <span class="r-sec-num">03</span>
@@ -1178,7 +1172,7 @@
         </div>
       </div>
 
-      <!-- S04 -->
+      
       <div class="r-card">
         <div class="r-card-head">
           <span class="r-sec-num">04</span>
@@ -1194,7 +1188,7 @@
         </div>
       </div>
 
-      <!-- S05 -->
+      
       <div class="r-card">
         <div class="r-card-head">
           <span class="r-sec-num">05</span>
@@ -1214,7 +1208,7 @@
         </div>
       </div>
 
-      <!-- S06 -->
+      
       <div class="r-card">
         <div class="r-card-head">
           <span class="r-sec-num">06</span>
@@ -1264,10 +1258,10 @@
         </div>
       </div>
 
-    </div><!-- /#results -->
+    </div>
   </section>
 
-  <!-- ════ FOOTER ════ -->
+  
   <footer class="footer">
     <div class="footer-inner">
       <div>
@@ -1287,9 +1281,9 @@
 
   <div class="toast" id="toast"></div>
 
-  <!-- ════ SCRIPTS ════ -->
+  
   <script>
-  /* ── I18N ─────────────────────────────────────────────────────────── */
+  
   const LANG = {
     ID: {
       "hero.eyebrow":"Aljabar Linear · HSV Color Space · Analisis Matriks",
@@ -1430,7 +1424,7 @@
   }
   function toggleTheme() { applyTheme(theme === 'dark' ? 'light' : 'dark'); }
 
-  /* ── SCROLL REVEAL ─────────────────────────────────────────────────── */
+  
   const observer = new IntersectionObserver(entries => {
     entries.forEach(e => {
       if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
@@ -1438,11 +1432,11 @@
   }, { threshold: 0.12 });
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-  /* ── SCROLL HELPERS ────────────────────────────────────────────────── */
+  
   function scrollToUpload() { document.getElementById('upload-section').scrollIntoView({ behavior: 'smooth' }); }
   function scrollToHowItWorks() { document.getElementById('how-it-works').scrollIntoView({ behavior: 'smooth' }); }
 
-  /* ── DROP ZONE ─────────────────────────────────────────────────────── */
+  
   const dropZone = document.getElementById('drop-zone');
   const fileInput = document.getElementById('file-input');
   dropZone.addEventListener('click', () => fileInput.click());
@@ -1480,7 +1474,7 @@
     document.getElementById('gray-content').classList.remove('open');
   }
 
-  /* ── ANALYSIS ──────────────────────────────────────────────────────── */
+  
   async function runAnalysis() {
     if (!currentFile) return;
     document.getElementById('loading').classList.add('show');
@@ -1602,11 +1596,11 @@
     setTimeout(() => t.classList.remove('show'), 4000);
   }
 
-  /* ── CANVAS MATH BG ────────────────────────────────────────────────── */
+  
   window._mathBgColor = () =>
     document.documentElement.getAttribute('data-theme') === 'light'
-      ? '28,52,140'    /* dark navy on light bg */
-      : '91,141,238';  /* accent blue on dark bg */
+      ? '28,52,140'    
+      : '91,141,238';  
 
   (function() {
     const c = document.getElementById('math-bg');
@@ -1636,7 +1630,7 @@
     (function loop() { ctx.clearRect(0,0,W,H); pts.forEach(p=>{p.tick();p.draw();}); requestAnimationFrame(loop); })();
   })();
 
-  /* ── INIT ──────────────────────────────────────────────────────────── */
+  
   applyLang(lang);
   applyTheme(theme);
   </script>
