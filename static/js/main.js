@@ -213,46 +213,64 @@ const LANG = {
 
   const dropZone = document.getElementById('drop-zone');
   const fileInput = document.getElementById('file-input');
-  dropZone.addEventListener('click', () => fileInput.click());
-  dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover'); });
-  dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
-  dropZone.addEventListener('drop', e => {
-    e.preventDefault(); dropZone.classList.remove('dragover');
-    if (e.dataTransfer.files[0]) setFile(e.dataTransfer.files[0]);
-  });
-  fileInput.addEventListener('change', () => { if (fileInput.files[0]) setFile(fileInput.files[0]); });
+  if (dropZone && fileInput) {
+    dropZone.addEventListener('click', () => fileInput.click());
+    dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover'); });
+    dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+    dropZone.addEventListener('drop', e => {
+      e.preventDefault(); dropZone.classList.remove('dragover');
+      if (e.dataTransfer.files[0]) setFile(e.dataTransfer.files[0]);
+    });
+    fileInput.addEventListener('change', () => { if (fileInput.files[0]) setFile(fileInput.files[0]); });
+  }
 
   function setFile(f) {
     currentFile = f;
     const r = new FileReader();
     r.onload = e => {
-      document.getElementById('preview-img').src = e.target.result;
-      document.getElementById('preview-wrap').classList.add('show');
-      dropZone.classList.add('has-file');
+      const previewImg = document.getElementById('preview-img');
+      if (previewImg) previewImg.src = e.target.result;
+      const previewWrap = document.getElementById('preview-wrap');
+      if (previewWrap) previewWrap.classList.add('show');
+      if (dropZone) dropZone.classList.add('has-file');
     };
     r.readAsDataURL(f);
-    document.getElementById('btn-analyze').disabled = false;
+    const btnAnalyze = document.getElementById('btn-analyze');
+    if (btnAnalyze) btnAnalyze.disabled = false;
   }
 
   function resetAll() {
     currentFile = null; analysisData = null;
-    fileInput.value = '';
-    document.getElementById('preview-img').src = '';
-    document.getElementById('preview-wrap').classList.remove('show');
-    dropZone.classList.remove('has-file', 'dragover');
-    document.getElementById('btn-analyze').disabled = true;
-    document.getElementById('results').style.display = 'none';
-    document.getElementById('results').classList.remove('show');
-    document.getElementById('loading').classList.remove('show');
-    document.getElementById('gray-toggle').checked = false;
-    document.getElementById('gray-content').classList.remove('open');
+    if (fileInput) fileInput.value = '';
+    const previewImg = document.getElementById('preview-img');
+    if (previewImg) previewImg.src = '';
+    const previewWrap = document.getElementById('preview-wrap');
+    if (previewWrap) previewWrap.classList.remove('show');
+    if (dropZone) dropZone.classList.remove('has-file', 'dragover');
+    const btnAnalyze = document.getElementById('btn-analyze');
+    if (btnAnalyze) btnAnalyze.disabled = true;
+    const results = document.getElementById('results');
+    if (results) {
+      results.style.display = 'none';
+      results.classList.remove('show');
+    }
+    const loader = document.getElementById('loading');
+    if (loader) loader.classList.remove('show');
+    const grayToggle = document.getElementById('gray-toggle');
+    if (grayToggle) grayToggle.checked = false;
+    const grayContent = document.getElementById('gray-content');
+    if (grayContent) grayContent.classList.remove('open');
   }
 
   async function runAnalysis() {
     if (!currentFile) return;
-    document.getElementById('loading').classList.add('show');
-    document.getElementById('results').style.display = 'none';
-    document.getElementById('results').classList.remove('show');
+    const loader = document.getElementById('loading');
+    if (loader) loader.classList.add('show');
+    const results = document.getElementById('results');
+    if (results) {
+      results.style.display = 'none';
+      results.classList.remove('show');
+    }
 
     const form = new FormData();
     form.append('image', currentFile);
@@ -263,108 +281,168 @@ const LANG = {
       analysisData = d;
       renderResults(d);
     } catch(err) { showToast(err.message); }
-    finally { document.getElementById('loading').classList.remove('show'); }
+    finally {
+      if (loader) loader.classList.remove('show');
+    }
   }
 
   function updateIdText(d) {
     const L = LANG[lang];
     const badge = document.getElementById('id-badge');
     const reason = document.getElementById('id-reason');
-    if (d.is_grayscale) {
-      badge.textContent = L['badge.gray']; badge.className = 'id-badge-large gray';
-      reason.textContent = (d.original_mode !== 'RGB' && d.original_mode !== 'RGBA')
-        ? L['reason.direct'] + ' ' + d.original_mode + '.'
-        : L['reason.gray'];
-    } else {
-      badge.textContent = L['badge.color']; badge.className = 'id-badge-large color';
-      reason.textContent = L['reason.color'];
+    if (badge) {
+      if (d.is_grayscale) {
+        badge.textContent = L['badge.gray']; badge.className = 'id-badge-large gray';
+      } else {
+        badge.textContent = L['badge.color']; badge.className = 'id-badge-large color';
+      }
+    }
+    if (reason) {
+      if (d.is_grayscale) {
+        reason.textContent = (d.original_mode !== 'RGB' && d.original_mode !== 'RGBA')
+          ? L['reason.direct'] + ' ' + d.original_mode + '.'
+          : L['reason.gray'];
+      } else {
+        reason.textContent = L['reason.color'];
+      }
     }
   }
 
   function renderResults(d) {
     updateIdText(d);
-    document.getElementById('v-mean-sat').textContent = d.mean_saturation;
-    document.getElementById('v-colored-ratio').textContent = (d.colored_pixel_ratio * 100).toFixed(2) + '%';
-    document.getElementById('v-dimension').textContent = d.width + ' × ' + d.height;
-    document.getElementById('v-total-px').textContent = d.total_pixels.toLocaleString();
+    
+    const vMeanSat = document.getElementById('v-mean-sat');
+    if (vMeanSat) vMeanSat.textContent = d.mean_saturation;
+    const vColoredRatio = document.getElementById('v-colored-ratio');
+    if (vColoredRatio) vColoredRatio.textContent = (d.colored_pixel_ratio * 100).toFixed(2) + '%';
+    const vDimension = document.getElementById('v-dimension');
+    if (vDimension) vDimension.textContent = d.width + ' × ' + d.height;
+    const vTotalPx = document.getElementById('v-total-px');
+    if (vTotalPx) vTotalPx.textContent = d.total_pixels.toLocaleString();
 
-    document.getElementById('img-original').src = 'data:' + d.original_mime + ';base64,' + d.original_b64;
-    document.getElementById('img-gray').src = 'data:image/png;base64,' + d.grayscale.image_b64;
+    const imgOriginal = document.getElementById('img-original');
+    if (imgOriginal) imgOriginal.src = 'data:' + d.original_mime + ';base64,' + d.original_b64;
+    const imgGray = document.getElementById('img-gray');
+    if (imgGray) imgGray.src = 'data:image/png;base64,' + d.grayscale.image_b64;
 
     setChImg('r', d.channels.R); setChImg('g', d.channels.G); setChImg('b', d.channels.B);
 
-    document.getElementById('chart-hist-rgb').src = 'data:image/png;base64,' + d.charts.histogram_rgb_b64;
-    document.getElementById('chart-bar-stats').src = 'data:image/png;base64,' + d.charts.bar_stats_b64;
-    document.getElementById('chart-heatmap').src = 'data:image/png;base64,' + d.charts.heatmap_saturation_b64;
-    document.getElementById('chart-scatter').src = 'data:image/png;base64,' + d.charts.scatter_rgb_b64;
+    const chartHistRgb = document.getElementById('chart-hist-rgb');
+    if (chartHistRgb) chartHistRgb.src = 'data:image/png;base64,' + d.charts.histogram_rgb_b64;
+    const chartBarStats = document.getElementById('chart-bar-stats');
+    if (chartBarStats) chartBarStats.src = 'data:image/png;base64,' + d.charts.bar_stats_b64;
+    const chartHeatmap = document.getElementById('chart-heatmap');
+    if (chartHeatmap) chartHeatmap.src = 'data:image/png;base64,' + d.charts.heatmap_saturation_b64;
+    const chartScatter = document.getElementById('chart-scatter');
+    if (chartScatter) chartScatter.src = 'data:image/png;base64,' + d.charts.scatter_rgb_b64;
 
     matrixTab = 'R';
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === 'R'));
     renderMatrix('R', d);
 
-    document.getElementById('gray-orig-img').src = 'data:' + d.original_mime + ';base64,' + d.original_b64;
-    document.getElementById('gray-res-img').src = 'data:image/png;base64,' + d.grayscale.image_b64;
-    document.getElementById('chart-gray-cmp').src = 'data:image/png;base64,' + d.grayscale.comparison_chart_b64;
-    document.getElementById('gray-min').textContent = d.grayscale.stats.min;
-    document.getElementById('gray-max').textContent = d.grayscale.stats.max;
-    document.getElementById('gray-mean').textContent = d.grayscale.stats.mean;
-    document.getElementById('gray-std').textContent = d.grayscale.stats.std;
+    const grayOrigImg = document.getElementById('gray-orig-img');
+    if (grayOrigImg) grayOrigImg.src = 'data:' + d.original_mime + ';base64,' + d.original_b64;
+    const grayResImg = document.getElementById('gray-res-img');
+    if (grayResImg) grayResImg.src = 'data:image/png;base64,' + d.grayscale.image_b64;
+    const chartGrayCmp = document.getElementById('chart-gray-cmp');
+    if (chartGrayCmp) chartGrayCmp.src = 'data:image/png;base64,' + d.grayscale.comparison_chart_b64;
+    const grayMin = document.getElementById('gray-min');
+    if (grayMin) grayMin.textContent = d.grayscale.stats.min;
+    const grayMax = document.getElementById('gray-max');
+    if (grayMax) grayMax.textContent = d.grayscale.stats.max;
+    const grayMean = document.getElementById('gray-mean');
+    if (grayMean) grayMean.textContent = d.grayscale.stats.mean;
+    const grayStd = document.getElementById('gray-std');
+    if (grayStd) grayStd.textContent = d.grayscale.stats.std;
 
     // Advanced LA rendering
-    document.getElementById('svd-rank').textContent = d.advanced_linear_algebra.svd.rank;
-    document.getElementById('svd-top-val').textContent = d.advanced_linear_algebra.svd.top_singular_value.toFixed(2);
-    document.getElementById('svd-k90').textContent = d.advanced_linear_algebra.svd.k_90;
-    document.getElementById('svd-k95').textContent = d.advanced_linear_algebra.svd.k_95;
-    document.getElementById('chart-svd-scree').src = 'data:image/png;base64,' + d.advanced_linear_algebra.svd.scree_plot_b64;
+    const svdRank = document.getElementById('svd-rank');
+    if (svdRank) svdRank.textContent = d.advanced_linear_algebra.svd.rank;
+    const svdTopVal = document.getElementById('svd-top-val');
+    if (svdTopVal) svdTopVal.textContent = d.advanced_linear_algebra.svd.top_singular_value.toFixed(2);
+    const svdK90 = document.getElementById('svd-k90');
+    if (svdK90) svdK90.textContent = d.advanced_linear_algebra.svd.k_90;
+    const svdK95 = document.getElementById('svd-k95');
+    if (svdK95) svdK95.textContent = d.advanced_linear_algebra.svd.k_95;
+    const chartSvdScree = document.getElementById('chart-svd-scree');
+    if (chartSvdScree) chartSvdScree.src = 'data:image/png;base64,' + d.advanced_linear_algebra.svd.scree_plot_b64;
 
     const covTbl = document.getElementById('pca-cov-matrix');
-    covTbl.innerHTML = '<tr><th></th><th style="color:#ff5f6d">R</th><th style="color:#4ecb8d">G</th><th style="color:#5b8dee">B</th></tr>';
-    const channels = ['R', 'G', 'B'];
-    const colors = ['#ff5f6d', '#4ecb8d', '#5b8dee'];
-    d.advanced_linear_algebra.pca.covariance_matrix.forEach((row, i) => {
-      let tr = document.createElement('tr');
-      let th = document.createElement('th');
-      th.textContent = channels[i];
-      th.style.color = colors[i];
-      tr.appendChild(th);
-      row.forEach(val => {
-        let td = document.createElement('td');
-        td.textContent = val.toFixed(1);
-        tr.appendChild(td);
+    if (covTbl) {
+      covTbl.innerHTML = '<tr><th></th><th style="color:#ff5f6d">R</th><th style="color:#4ecb8d">G</th><th style="color:#5b8dee">B</th></tr>';
+      const channels = ['R', 'G', 'B'];
+      const colors = ['#ff5f6d', '#4ecb8d', '#5b8dee'];
+      d.advanced_linear_algebra.pca.covariance_matrix.forEach((row, i) => {
+        let tr = document.createElement('tr');
+        let th = document.createElement('th');
+        th.textContent = channels[i];
+        th.style.color = colors[i];
+        tr.appendChild(th);
+        row.forEach(val => {
+          let td = document.createElement('td');
+          td.textContent = val.toFixed(1);
+          tr.appendChild(td);
+        });
+        covTbl.appendChild(tr);
       });
-      covTbl.appendChild(tr);
-    });
+    }
 
     const eigenInfo = document.getElementById('pca-eigen-info');
-    let eigenHtml = '';
-    const ev = d.advanced_linear_algebra.pca.eigenvalues;
-    const exp = d.advanced_linear_algebra.pca.explained_variance;
-    const evec = d.advanced_linear_algebra.pca.eigenvectors;
+    if (eigenInfo) {
+      let eigenHtml = '';
+      const ev = d.advanced_linear_algebra.pca.eigenvalues;
+      const exp = d.advanced_linear_algebra.pca.explained_variance;
+      const evec = d.advanced_linear_algebra.pca.eigenvectors;
 
-    for(let i=0; i<3; i++) {
-        eigenHtml += `<div><strong>&lambda;<sub>${i+1}</sub> = ${ev[i].toFixed(1)}</strong> (${exp[i].toFixed(2)}%)<br/>
-        Vector: [${evec[0][i].toFixed(3)}, ${evec[1][i].toFixed(3)}, ${evec[2][i].toFixed(3)}]</div><br/>`;
+      for(let i=0; i<3; i++) {
+          eigenHtml += `<div><strong>&lambda;<sub>${i+1}</sub> = ${ev[i].toFixed(1)}</strong> (${exp[i].toFixed(2)}%)<br/>
+          Vector: [${evec[0][i].toFixed(3)}, ${evec[1][i].toFixed(3)}, ${evec[2][i].toFixed(3)}]</div><br/>`;
+      }
+      eigenHtml += `<div style="margin-top:1rem; padding: 1rem; background: rgba(91,141,238,0.1); border-radius: 8px;">
+      <strong>Dominant Vector: ${d.advanced_linear_algebra.pca.dominant_axis}</strong>
+      </div>`;
+      eigenInfo.innerHTML = eigenHtml;
     }
-    eigenHtml += `<div style="margin-top:1rem; padding: 1rem; background: rgba(91,141,238,0.1); border-radius: 8px;">
-    <strong>Dominant Vector: ${d.advanced_linear_algebra.pca.dominant_axis}</strong>
-    </div>`;
-    eigenInfo.innerHTML = eigenHtml;
 
-    document.getElementById('advanced-la-results').style.display = 'block';
+    const advResults = document.getElementById('advanced-la-results');
+    if (advResults) advResults.style.display = 'block';
 
     const results = document.getElementById('results');
-    results.style.display = 'block';
-    results.classList.add('show');
-    results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (results) {
+      results.style.display = 'block';
+      results.classList.add('show');
+      results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
+  fontChImg = function setChImg(ch, data) {
+    const img = document.getElementById('ch-' + ch + '-img');
+    if (img) img.src = 'data:image/png;base64,' + data.image_b64;
+    const min = document.getElementById('ch-' + ch + '-min');
+    if (min) min.textContent = data.stats.min;
+    const max = document.getElementById('ch-' + ch + '-max');
+    if (max) max.textContent = data.stats.max;
+    const mean = document.getElementById('ch-' + ch + '-mean');
+    if (mean) mean.textContent = data.stats.mean;
+    const std = document.getElementById('ch-' + ch + '-std');
+    if (std) std.textContent = data.stats.std;
+    const hist = document.getElementById('ch-' + ch + '-hist');
+    if (hist) hist.src = 'data:image/png;base64,' + data.histogram_b64;
   }
 
   function setChImg(ch, data) {
-    document.getElementById('ch-' + ch + '-img').src = 'data:image/png;base64,' + data.image_b64;
-    document.getElementById('ch-' + ch + '-min').textContent = data.stats.min;
-    document.getElementById('ch-' + ch + '-max').textContent = data.stats.max;
-    document.getElementById('ch-' + ch + '-mean').textContent = data.stats.mean;
-    document.getElementById('ch-' + ch + '-std').textContent = data.stats.std;
-    document.getElementById('ch-' + ch + '-hist').src = 'data:image/png;base64,' + data.histogram_b64;
+    const img = document.getElementById('ch-' + ch + '-img');
+    if (img) img.src = 'data:image/png;base64,' + data.image_b64;
+    const min = document.getElementById('ch-' + ch + '-min');
+    if (min) min.textContent = data.stats.min;
+    const max = document.getElementById('ch-' + ch + '-max');
+    if (max) max.textContent = data.stats.max;
+    const mean = document.getElementById('ch-' + ch + '-mean');
+    if (mean) mean.textContent = data.stats.mean;
+    const std = document.getElementById('ch-' + ch + '-std');
+    if (std) std.textContent = data.stats.std;
+    const hist = document.getElementById('ch-' + ch + '-hist');
+    if (hist) hist.src = 'data:image/png;base64,' + data.histogram_b64;
   }
 
   function switchMatrix(tab, btn) {
@@ -381,34 +459,44 @@ const LANG = {
     else if (tab === 'B') { matrix = d.channels.B.matrix; shape = d.channels.B.matrix_shape; rgb = '80,140,240'; }
     else                  { matrix = d.grayscale.matrix;  shape = d.grayscale.matrix_shape;  rgb = '160,168,192'; }
 
-    const info = LANG[lang]['matrix.info']
-      .replace('%R', shape[0]).replace('%C', shape[1])
-      .replace('%W', d.width).replace('%H', d.height);
-    document.getElementById('matrix-info').textContent = info;
+    const infoEl = document.getElementById('matrix-info');
+    if (infoEl) {
+      const info = LANG[lang]['matrix.info']
+        .replace('%R', shape[0]).replace('%C', shape[1])
+        .replace('%W', d.width).replace('%H', d.height);
+      infoEl.textContent = info;
+    }
 
     const tbl = document.getElementById('matrix-tbl');
-    tbl.innerHTML = '';
-    matrix.forEach(row => {
-      const tr = document.createElement('tr');
-      row.forEach(val => {
-        const td = document.createElement('td');
-        td.textContent = val;
-        td.style.backgroundColor = `rgba(${rgb},${Math.max(0.07, val/255)})`;
-        tr.appendChild(td);
+    if (tbl) {
+      tbl.innerHTML = '';
+      matrix.forEach(row => {
+        const tr = document.createElement('tr');
+        row.forEach(val => {
+          const td = document.createElement('td');
+          td.textContent = val;
+          td.style.backgroundColor = `rgba(${rgb},${Math.max(0.07, val/255)})`;
+          tr.appendChild(td);
+        });
+        tbl.appendChild(tr);
       });
-      tbl.appendChild(tr);
-    });
+    }
   }
 
   function toggleGray() {
-    document.getElementById('gray-content').classList.toggle('open',
-      document.getElementById('gray-toggle').checked);
+    const grayContent = document.getElementById('gray-content');
+    const grayToggle = document.getElementById('gray-toggle');
+    if (grayContent && grayToggle) {
+      grayContent.classList.toggle('open', grayToggle.checked);
+    }
   }
 
   function showToast(msg) {
     const t = document.getElementById('toast');
-    t.textContent = msg; t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 4000);
+    if (t) {
+      t.textContent = msg; t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 4000);
+    }
   }
 
   window._mathBgColor = () =>
@@ -449,45 +537,59 @@ const LANG = {
 
   const pcaDropZone = document.getElementById('pca-drop-zone');
   const pcaFileInput = document.getElementById('pca-file-input');
-  pcaDropZone.addEventListener('click', () => pcaFileInput.click());
-  pcaDropZone.addEventListener('dragover', e => { e.preventDefault(); pcaDropZone.classList.add('dragover'); });
-  pcaDropZone.addEventListener('dragleave', () => pcaDropZone.classList.remove('dragover'));
-  pcaDropZone.addEventListener('drop', e => {
-    e.preventDefault(); pcaDropZone.classList.remove('dragover');
-    if (e.dataTransfer.files[0]) setPcaFile(e.dataTransfer.files[0]);
-  });
-  pcaFileInput.addEventListener('change', () => { if (pcaFileInput.files[0]) setPcaFile(pcaFileInput.files[0]); });
+  if (pcaDropZone && pcaFileInput) {
+    pcaDropZone.addEventListener('click', () => pcaFileInput.click());
+    pcaDropZone.addEventListener('dragover', e => { e.preventDefault(); pcaDropZone.classList.add('dragover'); });
+    pcaDropZone.addEventListener('dragleave', () => pcaDropZone.classList.remove('dragover'));
+    pcaDropZone.addEventListener('drop', e => {
+      e.preventDefault(); pcaDropZone.classList.remove('dragover');
+      if (e.dataTransfer.files[0]) setPcaFile(e.dataTransfer.files[0]);
+    });
+    pcaFileInput.addEventListener('change', () => { if (pcaFileInput.files[0]) setPcaFile(pcaFileInput.files[0]); });
+  }
 
   function setPcaFile(f) {
     pcaFile = f;
     const r = new FileReader();
     r.onload = e => {
-      document.getElementById('pca-preview-img').src = e.target.result;
-      document.getElementById('pca-preview-wrap').classList.add('show');
-      pcaDropZone.classList.add('has-file');
+      const previewImg = document.getElementById('pca-preview-img');
+      if (previewImg) previewImg.src = e.target.result;
+      const previewWrap = document.getElementById('pca-preview-wrap');
+      if (previewWrap) previewWrap.classList.add('show');
+      if (pcaDropZone) pcaDropZone.classList.add('has-file');
     };
     r.readAsDataURL(f);
-    document.getElementById('btn-pca-compress').disabled = false;
+    const btnCompress = document.getElementById('btn-pca-compress');
+    if (btnCompress) btnCompress.disabled = false;
     // Reset hasil sebelumnya
-    document.getElementById('pca-results').classList.remove('show');
-    document.getElementById('pca-kmax-display').textContent = '—';
+    const results = document.getElementById('pca-results');
+    if (results) results.classList.remove('show');
+    const kmaxDisp = document.getElementById('pca-kmax-display');
+    if (kmaxDisp) kmaxDisp.textContent = '—';
   }
 
   function resetPca() {
     pcaFile = null;
-    pcaFileInput.value = '';
-    document.getElementById('pca-preview-img').src = '';
-    document.getElementById('pca-preview-wrap').classList.remove('show');
-    pcaDropZone.classList.remove('has-file', 'dragover');
-    document.getElementById('btn-pca-compress').disabled = true;
-    document.getElementById('pca-results').classList.remove('show');
-    document.getElementById('pca-loading').classList.remove('show');
-    document.getElementById('pca-kmax-display').textContent = '—';
+    if (pcaFileInput) pcaFileInput.value = '';
+    const previewImg = document.getElementById('pca-preview-img');
+    if (previewImg) previewImg.src = '';
+    const previewWrap = document.getElementById('pca-preview-wrap');
+    if (previewWrap) previewWrap.classList.remove('show');
+    if (pcaDropZone) pcaDropZone.classList.remove('has-file', 'dragover');
+    const btnCompress = document.getElementById('btn-pca-compress');
+    if (btnCompress) btnCompress.disabled = true;
+    const results = document.getElementById('pca-results');
+    if (results) results.classList.remove('show');
+    const loading = document.getElementById('pca-loading');
+    if (loading) loading.classList.remove('show');
+    const kmaxDisp = document.getElementById('pca-kmax-display');
+    if (kmaxDisp) kmaxDisp.textContent = '—';
   }
 
   // ─── PCA Compression JS ────────────────────────────────────────
 
   function updateSliderGradient(slider) {
+    if (!slider) return;
     const val = parseInt(slider.value);
     const max = parseInt(slider.max);
     const pct = ((val - 1) / (max - 1)) * 100;
@@ -495,8 +597,10 @@ const LANG = {
   }
 
   function onPcaSliderInput(slider) {
+    if (!slider) return;
     const k = parseInt(slider.value);
-    document.getElementById('pca-k-display').textContent = k;
+    const kDisp = document.getElementById('pca-k-display');
+    if (kDisp) kDisp.textContent = k;
     updateSliderGradient(slider);
     // Update active preset button
     document.querySelectorAll('.preset-btn').forEach(b => {
@@ -507,9 +611,11 @@ const LANG = {
 
   function setPcaK(k) {
     const slider = document.getElementById('pca-k-slider');
+    if (!slider) return;
     const clamped = Math.min(k, parseInt(slider.max));
     slider.value = clamped;
-    document.getElementById('pca-k-display').textContent = clamped;
+    const kDisp = document.getElementById('pca-k-display');
+    if (kDisp) kDisp.textContent = clamped;
     updateSliderGradient(slider);
     document.querySelectorAll('.preset-btn').forEach(b => {
       const bk = parseInt(b.textContent.replace('k=', ''));
@@ -519,10 +625,16 @@ const LANG = {
 
   async function runPcaCompress() {
     if (!pcaFile) return;
-    const k = parseInt(document.getElementById('pca-k-slider').value);
-    document.getElementById('pca-loading').classList.add('show');
-    document.getElementById('pca-results').classList.remove('show');
-    document.getElementById('btn-pca-compress').disabled = true;
+    const slider = document.getElementById('pca-k-slider');
+    if (!slider) return;
+    const k = parseInt(slider.value);
+
+    const loading = document.getElementById('pca-loading');
+    if (loading) loading.classList.add('show');
+    const results = document.getElementById('pca-results');
+    if (results) results.classList.remove('show');
+    const btnCompress = document.getElementById('btn-pca-compress');
+    if (btnCompress) btnCompress.disabled = true;
 
     const form = new FormData();
     form.append('image', pcaFile);
@@ -536,8 +648,8 @@ const LANG = {
     } catch(err) {
       showToast(err.message);
     } finally {
-      document.getElementById('pca-loading').classList.remove('show');
-      document.getElementById('btn-pca-compress').disabled = false;
+      if (loading) loading.classList.remove('show');
+      if (btnCompress) btnCompress.disabled = false;
     }
   }
 
@@ -552,47 +664,62 @@ const LANG = {
     }
 
     // MSE
-    document.getElementById('pca-val-mse').textContent = d.mse;
+    const valMse = document.getElementById('pca-val-mse');
+    if (valMse) valMse.textContent = d.mse;
     const mseCard = document.getElementById('pca-card-mse');
-    mseCard.className = 'pca-metric-card ' + qualityClass('mse', d.mse);
+    if (mseCard) mseCard.className = 'pca-metric-card ' + qualityClass('mse', d.mse);
 
     // PSNR
-    document.getElementById('pca-val-psnr').textContent = d.psnr + ' dB';
+    const valPsnr = document.getElementById('pca-val-psnr');
+    if (valPsnr) valPsnr.textContent = d.psnr + ' dB';
     const psnrCard = document.getElementById('pca-card-psnr');
-    psnrCard.className = 'pca-metric-card ' + qualityClass('psnr', d.psnr);
+    if (psnrCard) psnrCard.className = 'pca-metric-card ' + qualityClass('psnr', d.psnr);
 
     // SSIM
-    document.getElementById('pca-val-ssim').textContent = d.ssim;
+    const valSsim = document.getElementById('pca-val-ssim');
+    if (valSsim) valSsim.textContent = d.ssim;
     const ssimCard = document.getElementById('pca-card-ssim');
-    ssimCard.className = 'pca-metric-card ' + qualityClass('ssim', d.ssim);
+    if (ssimCard) ssimCard.className = 'pca-metric-card ' + qualityClass('ssim', d.ssim);
 
     // Compression Ratio
-    document.getElementById('pca-val-cr').textContent = d.compression_ratio + '×';
+    const valCr = document.getElementById('pca-val-cr');
+    if (valCr) valCr.textContent = d.compression_ratio + '×';
     const crCard = document.getElementById('pca-card-cr');
-    crCard.className = 'pca-metric-card ' + qualityClass('cr', d.compression_ratio);
+    if (crCard) crCard.className = 'pca-metric-card ' + qualityClass('cr', d.compression_ratio);
 
     // k info
-    document.getElementById('pca-val-k').textContent = d.k_used;
-    document.getElementById('pca-val-kmax').textContent = d.k_max;
-    document.getElementById('pca-kmax-display').textContent = d.k_max;
+    const valK = document.getElementById('pca-val-k');
+    if (valK) valK.textContent = d.k_used;
+    const valKmax = document.getElementById('pca-val-kmax');
+    if (valKmax) valKmax.textContent = d.k_max;
+    const kmaxDisp = document.getElementById('pca-kmax-display');
+    if (kmaxDisp) kmaxDisp.textContent = d.k_max;
 
     // Explained Variance per channel
     const ev = d.explained_variance_pct;
-    document.getElementById('pca-ev-r').textContent = ev[0].toFixed(1) + '%';
-    document.getElementById('pca-ev-g').textContent = ev[1].toFixed(1) + '%';
-    document.getElementById('pca-ev-b').textContent = ev[2].toFixed(1) + '%';
+    const evR = document.getElementById('pca-ev-r');
+    if (evR) evR.textContent = ev[0].toFixed(1) + '%';
+    const evG = document.getElementById('pca-ev-g');
+    if (evG) evG.textContent = ev[1].toFixed(1) + '%';
+    const evB = document.getElementById('pca-ev-b');
+    if (evB) evB.textContent = ev[2].toFixed(1) + '%';
 
     // Images
-    document.getElementById('pca-img-original').src = 'data:image/png;base64,' + d.original_b64;
-    document.getElementById('pca-img-compressed').src = 'data:image/png;base64,' + d.compressed_b64;
-    document.getElementById('pca-compressed-lbl').textContent =
-      (LANG[lang]['pca.compressed.lbl'] || 'Hasil Kompresi') + ' (k=' + d.k_used + ')';
+    const imgOrig = document.getElementById('pca-img-original');
+    if (imgOrig) imgOrig.src = 'data:image/png;base64,' + d.original_b64;
+    const imgComp = document.getElementById('pca-img-compressed');
+    if (imgComp) imgComp.src = 'data:image/png;base64,' + d.compressed_b64;
+    const compLbl = document.getElementById('pca-compressed-lbl');
+    if (compLbl) compLbl.textContent = (LANG[lang]['pca.compressed.lbl'] || 'Hasil Kompresi') + ' (k=' + d.k_used + ')';
 
     // Variance chart
-    document.getElementById('pca-variance-chart').src = 'data:image/png;base64,' + d.variance_chart_b64;
+    const varChart = document.getElementById('pca-variance-chart');
+    if (varChart) varChart.src = 'data:image/png;base64,' + d.variance_chart_b64;
 
-    document.getElementById('pca-results').classList.add('show');
-    document.getElementById('pca-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const pcaResults = document.getElementById('pca-results');
+    if (pcaResults) pcaResults.classList.add('show');
+    const pcaSec = document.getElementById('pca-section');
+    if (pcaSec) pcaSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
   applyLang(lang);
