@@ -16,9 +16,11 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'bmp', 'webp'}
 
 def allowed_file(filename):
+    """Check if the uploaded file extension is allowed."""
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 def fig_to_b64(fig):
+    """Convert a Matplotlib figure to a base64-encoded PNG string."""
     buf = io.BytesIO()
     fig.savefig(buf, format='png', bbox_inches='tight', facecolor=fig.get_facecolor())
     buf.seek(0)
@@ -27,6 +29,7 @@ def fig_to_b64(fig):
     return b64
     
 def img_to_b64(img_array, fmt='PNG'):
+    """Convert a NumPy image array to a base64-encoded string."""
     pil_img = Image.fromarray(img_array)
     buf = io.BytesIO()
     pil_img.save(buf, format=fmt)
@@ -34,6 +37,7 @@ def img_to_b64(img_array, fmt='PNG'):
     return base64.b64encode(buf.read()).decode('utf-8')
 
 def get_stats(arr):
+    """Compute min, max, mean, and standard deviation for a given array."""
     return {
         'min': int(np.min(arr)),
         'max': int(np.max(arr)),
@@ -467,9 +471,14 @@ def analyze():
         gray_stats = get_stats(gray_arr)
         gray_matrix, gray_matrix_shape = build_matrix_subset(gray_arr)
 
-        r_img = np.zeros_like(img_rgb); r_img[:, :, 0] = r
-        g_img = np.zeros_like(img_rgb); g_img[:, :, 1] = g
-        b_img = np.zeros_like(img_rgb); b_img[:, :, 2] = b
+        r_img = np.zeros_like(img_rgb)
+        r_img[:, :, 0] = r
+
+        g_img = np.zeros_like(img_rgb)
+        g_img[:, :, 1] = g
+
+        b_img = np.zeros_like(img_rgb)
+        b_img[:, :, 2] = b
 
         r_matrix, r_matrix_shape = build_matrix_subset(r)
         g_matrix, g_matrix_shape = build_matrix_subset(g)
@@ -513,7 +522,7 @@ def analyze():
             'matrix_shape': list(gray_matrix_shape),
             'comparison_chart_b64': make_grayscale_comparison_chart(r, g, b, gray_arr),
         }
-
+        
         svd_data = compute_svd(gray_arr)
         pca_data = compute_pca(img_rgb)
 
