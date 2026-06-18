@@ -725,48 +725,45 @@ const LANG = {
   applyLang(lang);
   applyTheme(theme);
 
-  // --- Dynamic Event Listeners ---
-  document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('nav-pca-btn')?.addEventListener('click', () => {
-      document.getElementById('pca-section')?.scrollIntoView({ behavior: 'smooth' });
-    });
-
-    document.getElementById('lang-toggle')?.addEventListener('click', toggleLang);
-    document.getElementById('theme-toggle')?.addEventListener('click', toggleTheme);
-
-    document.getElementById('hero-cta-btn')?.addEventListener('click', scrollToUpload);
-    document.getElementById('hero-how-btn')?.addEventListener('click', scrollToHowItWorks);
-
-    document.getElementById('btn-analyze')?.addEventListener('click', runAnalysis);
-    document.getElementById('btn-reset')?.addEventListener('click', resetAll);
-
-    document.getElementById('gray-toggle')?.addEventListener('change', toggleGray);
-
-    document.querySelectorAll('.tab-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        const tab = e.currentTarget.dataset.tab;
-        switchMatrix(tab, e.currentTarget);
-      });
-    });
-
-    const pcaSlider = document.getElementById('pca-k-slider');
-    if (pcaSlider) {
-      pcaSlider.addEventListener('input', (e) => {
-        onPcaSliderInput(e.currentTarget);
-      });
-      pcaSlider.addEventListener('change', (e) => {
-        onPcaSliderInput(e.currentTarget);
-      });
-      updateSliderGradient(pcaSlider);
-    }
-
-    document.querySelectorAll('.preset-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        const k = parseInt(e.currentTarget.dataset.k);
-        setPcaK(k);
-      });
-    });
-
-    document.getElementById('btn-pca-compress')?.addEventListener('click', runPcaCompress);
-    document.getElementById('btn-pca-reset')?.addEventListener('click', resetPca);
+  document.getElementById('nav-pca-btn')?.addEventListener('click', () => {
+    document.getElementById('pca-section')?.scrollIntoView({ behavior: 'smooth' });
   });
+
+  document.getElementById('lang-toggle')?.addEventListener('click', toggleLang);
+  document.getElementById('theme-toggle')?.addEventListener('click', toggleTheme);
+
+  document.getElementById('hero-cta-btn')?.addEventListener('click', scrollToUpload);
+  document.getElementById('hero-how-btn')?.addEventListener('click', scrollToHowItWorks);
+
+  document.getElementById('btn-analyze')?.addEventListener('click', runAnalysis);
+  document.getElementById('btn-reset')?.addEventListener('click', resetAll);
+
+  document.getElementById('gray-toggle')?.addEventListener('change', toggleGray);
+
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const tab = e.currentTarget.dataset.tab;
+      switchMatrix(tab, e.currentTarget);
+    });
+  });
+
+  const pcaSlider = document.getElementById('pca-k-slider');
+  if (pcaSlider) {
+    pcaSlider.addEventListener('input', (e) => {
+      onPcaSliderInput(e.currentTarget);
+    });
+    pcaSlider.addEventListener('change', (e) => {
+      onPcaSliderInput(e.currentTarget);
+    });
+    updateSliderGradient(pcaSlider);
+  }
+
+  document.querySelectorAll('.preset-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const k = parseInt(e.currentTarget.dataset.k);
+      setPcaK(k);
+    });
+  });
+
+  document.getElementById('btn-pca-compress')?.addEventListener('click', runPcaCompress);
+  document.getElementById('btn-pca-reset')?.addEventListener('click', resetPca);
