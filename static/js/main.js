@@ -532,7 +532,7 @@ const LANG = {
     (function loop() { ctx.clearRect(0,0,W,H); pts.forEach(p=>{p.tick();p.draw();}); requestAnimationFrame(loop); })();
   })();
 
-  // PCA Upload Zone (Independent)
+  // PCA Upload Zone (dibuat terpisah)
   let pcaFile = null;
 
   const pcaDropZone = document.getElementById('pca-drop-zone');
@@ -561,7 +561,6 @@ const LANG = {
     r.readAsDataURL(f);
     const btnCompress = document.getElementById('btn-pca-compress');
     if (btnCompress) btnCompress.disabled = false;
-    // Reset hasil sebelumnya
     const results = document.getElementById('pca-results');
     if (results) results.classList.remove('show');
     const kmaxDisp = document.getElementById('pca-kmax-display');
@@ -586,8 +585,6 @@ const LANG = {
     if (kmaxDisp) kmaxDisp.textContent = '—';
   }
 
-  // ─── PCA Compression JS ────────────────────────────────────────
-
   function updateSliderGradient(slider) {
     if (!slider) return;
     const val = parseInt(slider.value);
@@ -602,7 +599,6 @@ const LANG = {
     const kDisp = document.getElementById('pca-k-display');
     if (kDisp) kDisp.textContent = k;
     updateSliderGradient(slider);
-    // Update active preset button
     document.querySelectorAll('.preset-btn').forEach(b => {
       const bk = parseInt(b.textContent.replace('k=', ''));
       b.classList.toggle('active', bk === k);
