@@ -1,38 +1,5 @@
+// CSS Transitions and IntersectionObserver handle animations natively without external CDNs
 
-import { animate, inView, hover } from "https://cdn.jsdelivr.net/npm/motion@11.11.13/+esm";
-
-// Framer Motion Animations
-document.addEventListener('DOMContentLoaded', () => {
-    // Scroll inView Animations (Fade & Slide Up)
-    inView('.reveal', (info) => {
-        animate(info.target, { opacity: [0, 1], y: [30, 0] }, { duration: 0.8, easing: 'ease-out' });
-    });
-    
-    inView('.r-card', (info) => {
-        animate(info.target, { opacity: [0, 1], scale: [0.95, 1] }, { duration: 0.6, easing: 'ease-out' });
-    });
-
-    inView('.chart-tile', (info) => {
-        animate(info.target, { opacity: [0, 1], y: [20, 0] }, { duration: 0.5, easing: 'ease-out' });
-    });
-
-    // Hover Interactions
-    const buttons = document.querySelectorAll('.btn-primary, .btn-secondary, .btn-nav');
-    buttons.forEach(btn => {
-        hover(btn, () => {
-            animate(btn, { scale: 1.05 }, { duration: 0.2 });
-            return () => animate(btn, { scale: 1 }, { duration: 0.2 });
-        });
-    });
-
-    const dropZones = document.querySelectorAll('.drop-zone');
-    dropZones.forEach(dz => {
-        hover(dz, () => {
-            animate(dz, { scale: 1.02, borderColor: 'var(--accent)' }, { duration: 0.3 });
-            return () => animate(dz, { scale: 1, borderColor: 'var(--border)' }, { duration: 0.3 });
-        });
-    });
-});
 
 const LANG = {
     ID: {
@@ -239,7 +206,7 @@ const LANG = {
       if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
     });
   }, { threshold: 0.12 });
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  document.querySelectorAll('.reveal, .r-card, .chart-tile').forEach(el => observer.observe(el));
 
   function scrollToUpload() { document.getElementById('upload-section').scrollIntoView({ behavior: 'smooth' }); }
   function scrollToHowItWorks() { document.getElementById('how-it-works').scrollIntoView({ behavior: 'smooth' }); }
