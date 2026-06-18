@@ -25,7 +25,7 @@ def fig_to_b64(fig):
     b64 = base64.b64encode(buf.read()).decode('utf-8')
     plt.close(fig)
     return b64
-
+    
 def img_to_b64(img_array, fmt='PNG'):
     pil_img = Image.fromarray(img_array)
     buf = io.BytesIO()
@@ -256,6 +256,164 @@ def build_matrix_subset(channel_data, max_dim=64):
     sub = channel_data[:min(max_dim, h), :min(max_dim, w)]
     return sub.tolist(), sub.shape
 
+
+# ─── PCA Compression ──────────────────────────────────────────────
+
+def compress_pca_channel(channel_float, k):
+    """
+    Kompresi 1 channel gambar (H×W float matrix) menggunakan PCA via SVD.
+    
+    Model: A = U Σ Vᵀ  →  Â_k = U[:,:k] · Σ[:k] · Vᵀ[:k,:]
+    
+    Returns: (reconstructed_channel, explained_variance_pct)
+    """
+    # channel_float: H×W, nilai 0..255
+    mean_row = np.mean(channel_float, axis=1, keepdims=True)  
+    X = channel_float - mean_row                              
+
+    U, S, Vt = np.linalg.svd(X, full_matrices=False)         
+
+    k = min(k, len(S))                                        
+
+    Uk = U[:, :k]          
+    Sk = np.diag(S[:k])    
+    Vtk = Vt[:k, :]        
+    X_rec = Uk @ Sk @ Vtk + mean_row 
+
+    total_var = np.sum(S ** 2)
+    explained_var_pct = float(np.sum(S[:k] ** 2) / (total_var + 1e-10)) * 100.0
+
+    return X_rec, explained_var_pct, k
+
+def _ssim_channel(a, b, K1=0.01, K2=0.03, L=255):
+    """SSIM manual per channel (tanpa scikit-image)."""
+    C1 = (K1 * L) ** 2
+    C2 = (K2 * L) ** 2
+    mu_a = float(np.mean(a))
+    mu_b = float(np.mean(b))
+    sig_a = float(np.std(a))
+    sig_b = float(np.std(b))
+    sig_ab = float(np.mean((a - mu_a) * (b - mu_b)))
+    num = (2 * mu_a * mu_b + C1) * (2 * sig_ab + C2)
+    den = (mu_a**2 + mu_b**2 + C1) * (sig_a**2 + sig_b**2 + C2)
+    return num / (den + 1e-10)
+
+def compute_pca_compression(img_rgb, k):
+    """
+    Kompresi gambar RGB dengan PCA (SVD per-channel).
+    Mengembalikan dict berisi gambar terkompresi dan metrik kualitas.
+    """
+    h, w = img_rgb.shape[:2]
+
+    channels_orig = [img_rgb[:, :, c].astype(np.float64) for c in range(3)]
+    channels_rec = []
+    ev_pcts = []
+    k_actual = k
+
+    for ch in channels_orig:
+        rec, ev_pct, k_actual = compress_pca_channel(ch, k)
+        channels_rec.append(rec)
+        ev_pcts.append(round(ev_pct, 2))
+
+    # Stack & clip ke [0, 255]
+    img_rec = np.stack([np.clip(c, 0, 255) for c in channels_rec], axis=-1).astype(np.uint8)
+
+    orig_f = img_rgb.astype(np.float64)
+    rec_f  = img_rec.astype(np.float64)
+
+    # MSE
+    mse = float(np.mean((orig_f - rec_f) ** 2))
+
+    # PSNR
+    if mse < 1e-10:
+        psnr = 100.0
+    else:
+        psnr = round(10.0 * np.log10((255.0 ** 2) / mse), 2)
+
+    # SSIM
+    ssim_vals = [_ssim_channel(channels_orig[c], channels_rec[c]) for c in range(3)]
+    ssim = round(float(np.mean(ssim_vals)), 4)
+
+    # Compression Ratio: data asli (H×W×3) vs data terkompresi (k×H + k×W + k per channel × 3)
+    original_size = h * w * 3
+    compressed_size = 3 * (k_actual * h + k_actual * w + k_actual)
+    compression_ratio = round(original_size / max(compressed_size, 1), 2)
+
+    # Gambar terkompresi → base64
+    compressed_b64 = img_to_b64(img_rec)
+
+    return {
+        'compressed_b64': compressed_b64,
+        'mse': round(mse, 4),
+        'psnr': psnr,
+        'ssim': ssim,
+        'compression_ratio': compression_ratio,
+        'explained_variance_pct': ev_pcts,
+        'k_used': k_actual,
+        'k_max': min(h, w),
+    }
+
+
+def make_pca_variance_chart(img_rgb, k_highlight):
+    """
+    Chart: Explained Variance (%) vs Jumlah Komponen k
+    untuk masing-masing channel R, G, B.
+    """
+    max_k = min(img_rgb.shape[0], img_rgb.shape[1])
+    # Sample k-values (max 60 titik agar cepat)
+    if max_k <= 60:
+        ks = list(range(1, max_k + 1))
+    else:
+        ks = list(range(1, 11)) + list(range(15, min(max_k+1, 101), 5)) + \
+             list(range(100, min(max_k+1, 501), 25))
+        ks = sorted(set(ks))
+
+    colors_ch = ['#ff5f6d', '#4ecb8d', '#5b8dee']
+    labels_ch = ['Red', 'Green', 'Blue']
+    ev_per_ch = [[], [], []]
+
+    for c_idx in range(3):
+        ch = img_rgb[:, :, c_idx].astype(np.float64)
+        mean_row = np.mean(ch, axis=1, keepdims=True)
+        X = ch - mean_row
+        _, S, _ = np.linalg.svd(X, full_matrices=False)
+        total_var = np.sum(S ** 2) + 1e-10
+        cumvar = np.cumsum(S ** 2) / total_var * 100
+        for k in ks:
+            ev_per_ch[c_idx].append(float(cumvar[min(k, len(cumvar)) - 1]))
+
+    fig, ax = plt.subplots(figsize=(7, 3.5), dpi=110)
+    fig.patch.set_facecolor('#13161e')
+    ax.set_facecolor('#1a1e2a')
+
+    for c_idx in range(3):
+        ax.plot(ks, ev_per_ch[c_idx], color=colors_ch[c_idx],
+                linewidth=1.8, label=labels_ch[c_idx], alpha=0.9)
+
+    # Vertical line di k yang dipilih
+    if k_highlight in ks:
+        ev_at_k = ev_per_ch[0][ks.index(k_highlight)]
+    else:
+        ev_at_k = None
+    ax.axvline(x=k_highlight, color='#f0c060', linewidth=1.2, linestyle='--',
+               label=f'k={k_highlight}')
+
+    ax.set_xlabel('Jumlah Komponen k', color='#7a8399', fontsize=8)
+    ax.set_ylabel('Explained Variance Kumulatif (%)', color='#7a8399', fontsize=8)
+    ax.set_ylim(0, 102)
+    ax.tick_params(colors='#e8ecf4', labelsize=7)
+    for spine in ax.spines.values():
+        spine.set_edgecolor('#252a38')
+    ax.grid(color='#252a38', linewidth=0.5, alpha=0.6)
+    ax.legend(facecolor='#1a1e2a', edgecolor='#252a38', labelcolor='#e8ecf4', fontsize=8)
+    ax.axhline(y=90, color='#7a8399', linewidth=0.6, linestyle=':', alpha=0.5)
+    ax.axhline(y=95, color='#7a8399', linewidth=0.6, linestyle=':', alpha=0.5)
+    ax.text(ks[-1], 90.5, '90%', color='#7a8399', fontsize=7, ha='right')
+    ax.text(ks[-1], 95.5, '95%', color='#7a8399', fontsize=7, ha='right')
+    fig.tight_layout(pad=0.6)
+    return fig_to_b64(fig)
+
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -381,6 +539,50 @@ def analyze():
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+
+@app.route('/compress_pca', methods=['POST'])
+def compress_pca():
+    if 'image' not in request.files:
+        return jsonify({'error': 'No image uploaded'}), 400
+
+    file = request.files['image']
+    if not file or file.filename == '' or not allowed_file(file.filename):
+        return jsonify({'error': 'Invalid file'}), 400
+
+    try:
+        k = int(request.form.get('k', 20))
+        k = max(1, k)
+
+        raw = file.read()
+        pil_img = Image.open(io.BytesIO(raw)).convert('RGB')
+        img_rgb = np.array(pil_img)
+
+        # Batasi ukuran agar SVD cepat (resize ke max 512px sisi terpanjang)
+        h, w = img_rgb.shape[:2]
+        max_side = 512
+        if max(h, w) > max_side:
+            scale = max_side / max(h, w)
+            new_h, new_w = int(h * scale), int(w * scale)
+            img_rgb = cv2.resize(img_rgb, (new_w, new_h), interpolation=cv2.INTER_AREA)
+
+        result = compute_pca_compression(img_rgb, k)
+
+        # Chart explained variance (hitung sekali, agak berat tapi informatif)
+        variance_chart_b64 = make_pca_variance_chart(img_rgb, result['k_used'])
+        result['variance_chart_b64'] = variance_chart_b64
+
+        # Gambar asli (setelah resize) sebagai base64 untuk perbandingan
+        original_b64 = img_to_b64(img_rgb)
+        result['original_b64'] = original_b64
+        result['resized_width'] = img_rgb.shape[1]
+        result['resized_height'] = img_rgb.shape[0]
+
+        return jsonify({'success': True, **result})
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)

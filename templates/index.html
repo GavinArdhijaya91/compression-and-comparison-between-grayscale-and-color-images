@@ -770,7 +770,172 @@
       .drop-icon { font-size: 2rem; margin-bottom: 0.5rem; }
     }
 
+    /* ─── PCA Compression Section ─────────────────────────────────── */
+    .pca-wrap {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); overflow: hidden; margin-bottom: 1.5rem;
+    }
+    .pca-header-band {
+      background: linear-gradient(135deg, rgba(91,141,238,0.12) 0%, rgba(78,203,141,0.08) 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 1.5rem 1.75rem; display: flex; align-items: center;
+      gap: 1rem; flex-wrap: wrap;
+    }
+    .pca-header-left { flex: 1; }
+    .pca-header-left h3 {
+      font-family: 'Sora', sans-serif; font-size: 1.05rem; font-weight: 700;
+      margin-bottom: 0.25rem;
+    }
+    .pca-header-left p { font-size: 0.82rem; color: var(--muted); }
+    .pca-body { padding: 1.75rem; }
+
+    .pca-controls {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); padding: 1.5rem; margin-bottom: 1.5rem;
+    }
+    .pca-controls-label {
+      font-size: 0.8rem; color: var(--muted); text-transform: uppercase;
+      letter-spacing: 0.07em; font-weight: 600; margin-bottom: 0.75rem;
+    }
+    .slider-row {
+      display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;
+    }
+    .pca-slider {
+      flex: 1; -webkit-appearance: none; appearance: none;
+      height: 6px; border-radius: 3px; outline: none; cursor: pointer;
+      background: linear-gradient(to right, var(--accent) 0%, var(--accent) var(--slider-pct, 30%), var(--border) var(--slider-pct, 30%), var(--border) 100%);
+      transition: background 0.1s;
+    }
+    .pca-slider::-webkit-slider-thumb {
+      -webkit-appearance: none; appearance: none;
+      width: 18px; height: 18px; border-radius: 50%;
+      background: var(--accent); cursor: pointer;
+      border: 3px solid var(--surface);
+      box-shadow: 0 0 0 2px var(--accent);
+      transition: transform var(--t);
+    }
+    .pca-slider::-webkit-slider-thumb:hover { transform: scale(1.2); }
+    .pca-slider::-moz-range-thumb {
+      width: 18px; height: 18px; border-radius: 50%;
+      background: var(--accent); cursor: pointer; border: 3px solid var(--surface);
+    }
+    .slider-k-display {
+      font-family: 'JetBrains Mono', monospace; font-size: 1.1rem;
+      font-weight: 700; color: var(--accent); min-width: 48px; text-align: center;
+      background: rgba(91,141,238,0.1); border: 1px solid rgba(91,141,238,0.3);
+      border-radius: 6px; padding: 0.2rem 0.5rem;
+    }
+    .preset-row {
+      display: flex; gap: 0.45rem; flex-wrap: wrap; margin-bottom: 1rem;
+    }
+    .preset-btn {
+      background: var(--border); border: 1px solid transparent;
+      color: var(--muted); border-radius: 6px; padding: 0.28rem 0.75rem;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;
+      font-weight: 700; cursor: pointer; transition: all var(--t);
+    }
+    .preset-btn:hover, .preset-btn.active {
+      background: var(--accent); color: #fff; border-color: var(--accent);
+    }
+    .pca-formula-row {
+      display: flex; gap: 0.75rem; flex-wrap: wrap;
+    }
+    .pca-formula-pill {
+      background: rgba(240,192,96,0.08); border: 1px solid rgba(240,192,96,0.2);
+      border-radius: 6px; padding: 0.4rem 0.85rem; font-size: 0.8rem;
+    }
+    .pca-formula-pill .fml-lbl { color: var(--muted); font-size: 0.7rem; margin-bottom: 0.15rem; }
+    .pca-formula-pill .fml-eq {
+      font-family: 'JetBrains Mono', monospace; font-weight: 700;
+      color: var(--yellow); font-size: 0.85rem;
+    }
+
+    .pca-metrics {
+      display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.85rem;
+      margin-bottom: 1.5rem;
+    }
+    .pca-metric-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); padding: 1rem 0.85rem; text-align: center;
+      transition: border-color var(--t);
+    }
+    .pca-metric-card.good { border-color: var(--success); }
+    .pca-metric-card.warn { border-color: var(--yellow); }
+    .pca-metric-card.bad  { border-color: var(--danger); }
+    .pca-metric-icon { font-size: 1.4rem; margin-bottom: 0.35rem; }
+    .pca-metric-lbl {
+      font-size: 0.68rem; color: var(--muted); text-transform: uppercase;
+      letter-spacing: 0.06em; margin-bottom: 0.4rem;
+    }
+    .pca-metric-val {
+      font-family: 'JetBrains Mono', monospace; font-size: 1.05rem;
+      font-weight: 700; color: var(--text);
+    }
+    .pca-metric-unit { font-size: 0.68rem; color: var(--muted); margin-top: 0.15rem; }
+
+    .pca-compare-2 {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+    .pca-compare-item { text-align: center; }
+    .pca-compare-item img {
+      width: 100%; border-radius: var(--radius-sm); border: 1px solid var(--border);
+      max-height: 300px; object-fit: contain; background: #000;
+    }
+    .pca-compare-lbl { margin-top: 0.6rem; font-size: 0.82rem; color: var(--muted); font-weight: 600; }
+
+    .pca-ev-row {
+      display: flex; gap: 0.6rem; margin-bottom: 1.5rem; flex-wrap: wrap;
+    }
+    .pca-ev-pill {
+      flex: 1; min-width: 100px;
+      border-radius: var(--radius-sm); padding: 0.6rem 0.85rem; text-align: center;
+      font-size: 0.78rem; border: 1px solid;
+    }
+    .pca-ev-pill.r-pill { background: rgba(255,95,109,0.07); border-color: rgba(255,95,109,0.3); }
+    .pca-ev-pill.g-pill { background: rgba(78,203,141,0.07); border-color: rgba(78,203,141,0.3); }
+    .pca-ev-pill.b-pill { background: rgba(91,141,238,0.07); border-color: rgba(91,141,238,0.3); }
+    .pca-ev-pill .ep-lbl { color: var(--muted); margin-bottom: 0.2rem; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .pca-ev-pill .ep-val { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 1rem; }
+    .pca-ev-pill.r-pill .ep-val { color: #ff5f6d; }
+    .pca-ev-pill.g-pill .ep-val { color: #4ecb8d; }
+    .pca-ev-pill.b-pill .ep-val { color: #5b8dee; }
+
+    .pca-loading-overlay {
+      display: none; padding: 2.5rem; text-align: center;
+    }
+    .pca-loading-overlay.show { display: block; }
+    .pca-loading-ring {
+      width: 44px; height: 44px; border-radius: 50%;
+      border: 3px solid var(--border); border-top-color: #4ecb8d;
+      animation: spin 0.9s linear infinite; margin: 0 auto 0.85rem;
+    }
+    .pca-result-section { display: none; }
+    .pca-result-section.show { display: block; }
+
+    .btn-pca {
+      background: linear-gradient(135deg, #4ecb8d, #38b875);
+      color: #fff; border: none; border-radius: var(--radius-sm);
+      padding: 0.75rem 1.75rem; font-size: 0.9rem; font-weight: 700;
+      cursor: pointer; font-family: 'Inter', sans-serif;
+      transition: opacity var(--t), transform var(--t);
+      display: inline-flex; align-items: center; gap: 0.5rem;
+    }
+    .btn-pca:hover { opacity: 0.87; transform: translateY(-2px); }
+    .btn-pca:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+    @media (max-width: 900px) {
+      .pca-metrics { grid-template-columns: repeat(3, 1fr); }
+      .pca-compare-2 { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 600px) {
+      .pca-metrics { grid-template-columns: 1fr 1fr; }
+      .pca-body { padding: 1.25rem; }
+      .pca-header-band { padding: 1.1rem 1.25rem; }
+    }
+
   </style>
+
 </head>
 <body>
 
@@ -782,6 +947,9 @@
       <div class="nav-name">Image<span>Matrix</span></div>
     </div>
     <div class="nav-links">
+      <button class="btn-nav" onclick="document.getElementById('pca-section').scrollIntoView({behavior:'smooth'})" style="background:rgba(78,203,141,0.15);border-color:rgba(78,203,141,0.4);color:#4ecb8d;">
+        <span>⚡</span> <span data-i18n="nav.pca">PCA Compress</span>
+      </button>
       <button class="btn-nav" id="lang-toggle" onclick="toggleLang()">
         <span id="lang-flag">🇮🇩</span>
         <span id="lang-label">ID</span>
@@ -1276,14 +1444,192 @@
             <div class="r-card-head">
                <div class="r-sec-title">Eigenvalues (Explained Variance)</div>
             </div>
-            <div class="r-card-body" id="pca-eigen-info" style="font-size:0.9rem; color:#e8ecf4; line-height: 1.8;">
+            <div class="r-card-body" id="pca
+    </div><!-- /#results -->
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════
+       SECTION: PCA Image Compression (Standalone)
+  ═══════════════════════════════════════════════════════════ -->
+  <hr class="divider" />
+  <section class="section" id="pca-section">
+    <div class="section-tag reveal" data-i18n="pca.section.tag">PCA Compression</div>
+    <h2 class="section-title reveal delay-1">
+      <span data-i18n="pca.section.title1">Kompresi Citra</span>
+      <em data-i18n="pca.section.title2"> dengan PCA.</em>
+    </h2>
+    <p class="section-desc reveal delay-2" data-i18n="pca.section.desc">Upload gambar di bawah, atur jumlah komponen k, lalu lihat hasil kompresi beserta metrik kualitas <strong>MSE, PSNR, SSIM</strong>, dan Compression Ratio.</p>
+
+    <div class="pca-wrap reveal delay-2">
+      <!-- Header -->
+      <div class="pca-header-band">
+        <div class="pca-header-left">
+          <h3 data-i18n="pca.card.title">PCA Image Compressor</h3>
+          <p data-i18n="pca.card.sub">Berbasis SVD per-Channel · A = UΣVᵀ → Âₖ = Uₖ·Σₖ·Vₖᵀ</p>
+        </div>
+        <div class="footer-stack">
+          <span class="stack-pill">NumPy SVD</span>
+          <span class="stack-pill">Per-Channel PCA</span>
+          <span class="stack-pill">MSE / PSNR / SSIM</span>
+        </div>
+      </div>
+
+      <div class="pca-body">
+
+        <!-- Upload zone PCA -->
+        <div class="drop-zone" id="pca-drop-zone" style="margin-bottom:1.5rem">
+          <input type="file" id="pca-file-input" accept=".png,.jpg,.jpeg,.bmp,.webp" />
+          <div class="drop-icon">🗜️</div>
+          <div class="drop-title" data-i18n="pca.drop.title">Drag &amp; Drop gambar untuk dikompres</div>
+          <div class="drop-hint" data-i18n="pca.drop.hint">PNG, JPG, BMP, WEBP — maks 16 MB</div>
+        </div>
+        <div class="preview-wrap" id="pca-preview-wrap">
+          <img id="pca-preview-img" src="" alt="Preview" />
+        </div>
+
+        <!-- Formula band -->
+        <div class="formula-band" style="margin:1.25rem 0">
+          <div>
+            <div class="formula-lbl" data-i18n="pca.formula.label">Dekomposisi SVD per-Channel</div>
+            <div class="formula-eq">A = UΣVᵀ → Âₖ = Uₖ·Σₖ·Vₖᵀ</div>
+          </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="pca-controls">
+          <div class="pca-controls-label" data-i18n="pca.controls.label">Atur Jumlah Komponen PCA (k)</div>
+          <div class="slider-row">
+            <input type="range" id="pca-k-slider" class="pca-slider"
+                   min="1" max="200" value="20"
+                   oninput="onPcaSliderInput(this)" />
+            <div class="slider-k-display" id="pca-k-display">20</div>
+          </div>
+          <div class="preset-row">
+            <div class="pca-controls-label" style="width:100%;margin-bottom:0.4rem" data-i18n="pca.preset.label">Preset Cepat:</div>
+            <button class="preset-btn" onclick="setPcaK(5)">k=5</button>
+            <button class="preset-btn" onclick="setPcaK(10)">k=10</button>
+            <button class="preset-btn active" onclick="setPcaK(20)">k=20</button>
+            <button class="preset-btn" onclick="setPcaK(50)">k=50</button>
+            <button class="preset-btn" onclick="setPcaK(100)">k=100</button>
+            <button class="preset-btn" onclick="setPcaK(150)">k=150</button>
+          </div>
+          <!-- Formula pills -->
+          <div class="pca-formula-row">
+            <div class="pca-formula-pill">
+              <div class="fml-lbl">MSE</div>
+              <div class="fml-eq">E[‖X-X̂‖²]</div>
+            </div>
+            <div class="pca-formula-pill">
+              <div class="fml-lbl">PSNR</div>
+              <div class="fml-eq">10·log₁₀(255²/MSE)</div>
+            </div>
+            <div class="pca-formula-pill">
+              <div class="fml-lbl">SSIM</div>
+              <div class="fml-eq">(2μₐμᵦ+C₁)(2σₐᵦ+C₂) / ...</div>
+            </div>
+            <div class="pca-formula-pill">
+              <div class="fml-lbl" data-i18n="pca.cr.label">Rasio Kompresi</div>
+              <div class="fml-eq">H·W·3 / 3k(H+W+1)</div>
             </div>
           </div>
         </div>
 
-      </div>
-    </div>
+        <div class="btn-row" style="margin-bottom:1.5rem">
+          <button class="btn-pca" id="btn-pca-compress" onclick="runPcaCompress()" disabled>
+            <span>⚡</span> <span data-i18n="pca.btn.compress">Kompres Gambar</span>
+          </button>
+          <button class="btn-secondary" onclick="resetPca()" data-i18n="btn.reset">Reset</button>
+          <div style="font-size:0.82rem;color:var(--muted);display:flex;align-items:center;gap:0.4rem">
+            <span data-i18n="pca.kmax.prefix">k max tersedia:</span>
+            <span id="pca-kmax-display" style="font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--accent)">—</span>
+          </div>
+        </div>
+
+        <!-- Loading -->
+        <div class="pca-loading-overlay" id="pca-loading">
+          <div class="pca-loading-ring"></div>
+          <div style="font-size:0.85rem;color:var(--muted)" data-i18n="pca.loading">Menghitung SVD &amp; merekonstruksi gambar...</div>
+        </div>
+
+        <!-- Results -->
+        <div class="pca-result-section" id="pca-results">
+
+          <!-- Metrics -->
+          <div class="pca-metrics">
+            <div class="pca-metric-card" id="pca-card-mse">
+              <div class="pca-metric-icon">📐</div>
+              <div class="pca-metric-lbl">MSE</div>
+              <div class="pca-metric-val" id="pca-val-mse">—</div>
+              <div class="pca-metric-unit" data-i18n="pca.mse.unit">↓ semakin kecil semakin baik</div>
+            </div>
+            <div class="pca-metric-card" id="pca-card-psnr">
+              <div class="pca-metric-icon">📡</div>
+              <div class="pca-metric-lbl">PSNR</div>
+              <div class="pca-metric-val" id="pca-val-psnr">—</div>
+              <div class="pca-metric-unit">dB (↑ better)</div>
+            </div>
+            <div class="pca-metric-card" id="pca-card-ssim">
+              <div class="pca-metric-icon">🔍</div>
+              <div class="pca-metric-lbl">SSIM</div>
+              <div class="pca-metric-val" id="pca-val-ssim">—</div>
+              <div class="pca-metric-unit" data-i18n="pca.ssim.unit">0–1 (↑ better)</div>
+            </div>
+            <div class="pca-metric-card" id="pca-card-cr">
+              <div class="pca-metric-icon">📦</div>
+              <div class="pca-metric-lbl" data-i18n="pca.cr.lbl">Rasio Kompresi</div>
+              <div class="pca-metric-val" id="pca-val-cr">—</div>
+              <div class="pca-metric-unit">×</div>
+            </div>
+            <div class="pca-metric-card" id="pca-card-k">
+              <div class="pca-metric-icon">🔢</div>
+              <div class="pca-metric-lbl" data-i18n="pca.k.lbl">Komponen k</div>
+              <div class="pca-metric-val" id="pca-val-k">—</div>
+              <div class="pca-metric-unit">dari max <span id="pca-val-kmax">—</span></div>
+            </div>
+          </div>
+
+          <!-- Explained Variance per channel -->
+          <div class="pca-controls-label" style="margin-bottom:0.65rem" data-i18n="pca.ev.label">Explained Variance per Channel</div>
+          <div class="pca-ev-row">
+            <div class="pca-ev-pill r-pill">
+              <div class="ep-lbl">Red</div>
+              <div class="ep-val" id="pca-ev-r">—</div>
+            </div>
+            <div class="pca-ev-pill g-pill">
+              <div class="ep-lbl">Green</div>
+              <div class="ep-val" id="pca-ev-g">—</div>
+            </div>
+            <div class="pca-ev-pill b-pill">
+              <div class="ep-lbl">Blue</div>
+              <div class="ep-val" id="pca-ev-b">—</div>
+            </div>
+          </div>
+
+          <!-- Image comparison -->
+          <div class="pca-controls-label" style="margin-bottom:0.65rem" data-i18n="pca.compare.label">Perbandingan Visual</div>
+          <div class="pca-compare-2">
+            <div class="pca-compare-item">
+              <img id="pca-img-original" src="" alt="Original" />
+              <div class="pca-compare-lbl" data-i18n="label.original">Gambar Asli</div>
+            </div>
+            <div class="pca-compare-item">
+              <img id="pca-img-compressed" src="" alt="Compressed" />
+              <div class="pca-compare-lbl" id="pca-compressed-lbl">Hasil Kompresi (k=—)</div>
+            </div>
+          </div>
+
+          <!-- Variance chart -->
+          <div class="chart-tile">
+            <div class="chart-tile-label" data-i18n="pca.varchart.label">Explained Variance (%) vs Jumlah Komponen k</div>
+            <img id="pca-variance-chart" src="" alt="Variance Chart" style="width:100%;border-radius:5px;" />
+          </div>
+
+        </div><!-- /pca-results -->
+      </div><!-- /pca-body -->
+    </div><!-- /pca-wrap -->
   </section>
+
+
 
   <footer class="footer">
     <div class="footer-inner">
@@ -1309,6 +1655,7 @@
   const LANG = {
     ID: {
       "hero.eyebrow":"Aljabar Linear · HSV Color Space · Analisis Matriks",
+      "nav.pca":"Kompres PCA",
       "hero.title1":"Analisis",
       "hero.title2":" &amp; identifikasi",
       "hero.title3":"gambar digital",
@@ -1362,10 +1709,36 @@
       "reason.gray":"Gambar diklasifikasikan GRAYSCALE mean saturasi HSV sangat rendah atau hampir tidak ada piksel berwarna.",
       "reason.direct":"Gambar diklasifikasikan GRAYSCALE mode file asli:",
       "matrix.info":"Menampilkan subset %R×%C dari gambar %W×%H piksel penuh.",
-      "footer.note":"Tugas Aljabar Linear · Analisis Citra Digital"
+      "footer.note":"Tugas Aljabar Linear · Analisis Citra Digital",
+      "sec.07":"Kompresi Citra dengan PCA",
+      "pca.formula.label":"Dekomposisi SVD per-Channel",
+      "pca.controls.label":"Atur Jumlah Komponen PCA (k)",
+      "pca.preset.label":"Preset Cepat:",
+      "pca.cr.label":"Rasio Kompresi",
+      "pca.btn.compress":"Kompres Gambar",
+      "pca.kmax.prefix":"k max tersedia:",
+      "pca.loading":"Menghitung SVD &amp; merekonstruksi gambar...",
+      "pca.mse.unit":"↓ semakin kecil semakin baik",
+      "pca.ssim.unit":"0–1 (↑ semakin baik)",
+      "pca.cr.lbl":"Rasio Kompresi",
+      "pca.k.lbl":"Komponen k",
+      "pca.k.unit":"dari max",
+      "pca.ev.label":"Explained Variance per Channel",
+      "pca.compare.label":"Perbandingan Visual",
+      "pca.varchart.label":"Explained Variance (%) vs Jumlah Komponen k",
+      "pca.compressed.lbl":"Hasil Kompresi",
+      "pca.section.tag":"Kompresi PCA",
+      "pca.section.title1":"Kompresi Citra",
+      "pca.section.title2":" dengan PCA.",
+      "pca.section.desc":"Upload gambar di bawah, atur jumlah komponen k, lalu lihat hasil kompresi beserta metrik kualitas MSE, PSNR, SSIM, dan Compression Ratio.",
+      "pca.card.title":"PCA Image Compressor",
+      "pca.card.sub":"Berbasis SVD per-Channel · A = UΣVᵀ → Âₖ = Uₖ·Σₖ·Vₖᵀ",
+      "pca.drop.title":"Drag &amp; Drop gambar untuk dikompres",
+      "pca.drop.hint":"PNG, JPG, BMP, WEBP — maks 16 MB"
     },
     EN: {
       "hero.eyebrow":"Linear Algebra · HSV Color Space · Matrix Analysis",
+      "nav.pca":"PCA Compress",
       "hero.title1":"Analyze","hero.title2":" &amp; identify","hero.title3":"digital images","hero.title4":"with matrices.",
       "hero.desc1":"Upload any image and get a","hero.desc2":" deep scientific analysis",
       "hero.desc3":" color classification, RGB channel breakdown, HSV saturation heatmap, pixel matrix visualization, and more.",
@@ -1415,7 +1788,32 @@
       "reason.gray":"Image classified as GRAYSCALE HSV mean saturation is very low or barely any colored pixels.",
       "reason.direct":"Image classified as GRAYSCALE original file mode:",
       "matrix.info":"Showing %R×%C subset of full %W×%H pixel image.",
-      "footer.note":"Linear Algebra Assignment · Digital Image Analysis"
+      "footer.note":"Linear Algebra Assignment · Digital Image Analysis",
+      "sec.07":"PCA Image Compression",
+      "pca.formula.label":"SVD Decomposition per-Channel",
+      "pca.controls.label":"Set Number of PCA Components (k)",
+      "pca.preset.label":"Quick Presets:",
+      "pca.cr.label":"Compression Ratio",
+      "pca.btn.compress":"Compress Image",
+      "pca.kmax.prefix":"k max available:",
+      "pca.loading":"Computing SVD &amp; reconstructing image...",
+      "pca.mse.unit":"↓ lower is better",
+      "pca.ssim.unit":"0–1 (↑ higher is better)",
+      "pca.cr.lbl":"Compression Ratio",
+      "pca.k.lbl":"Components k",
+      "pca.k.unit":"of max",
+      "pca.ev.label":"Explained Variance per Channel",
+      "pca.compare.label":"Visual Comparison",
+      "pca.varchart.label":"Explained Variance (%) vs Number of Components k",
+      "pca.compressed.lbl":"Compressed Result",
+      "pca.section.tag":"PCA Compression",
+      "pca.section.title1":"Image Compression",
+      "pca.section.title2":" with PCA.",
+      "pca.section.desc":"Upload an image below, set the number of components k, then see the compression result with quality metrics MSE, PSNR, SSIM, and Compression Ratio.",
+      "pca.card.title":"PCA Image Compressor",
+      "pca.card.sub":"SVD per-Channel based · A = UΣVᵀ → Âₖ = Uₖ·Σₖ·Vₖᵀ",
+      "pca.drop.title":"Drag &amp; Drop image to compress",
+      "pca.drop.hint":"PNG, JPG, BMP, WEBP — max 16 MB"
     }
   };
 
@@ -1688,6 +2086,157 @@
     for (let i = 0; i < 55; i++) pts.push(new P());
     (function loop() { ctx.clearRect(0,0,W,H); pts.forEach(p=>{p.tick();p.draw();}); requestAnimationFrame(loop); })();
   })();
+
+  // ─── PCA Upload Zone (Independent) ────────────────────────────────
+  let pcaFile = null;
+
+  const pcaDropZone = document.getElementById('pca-drop-zone');
+  const pcaFileInput = document.getElementById('pca-file-input');
+  pcaDropZone.addEventListener('click', () => pcaFileInput.click());
+  pcaDropZone.addEventListener('dragover', e => { e.preventDefault(); pcaDropZone.classList.add('dragover'); });
+  pcaDropZone.addEventListener('dragleave', () => pcaDropZone.classList.remove('dragover'));
+  pcaDropZone.addEventListener('drop', e => {
+    e.preventDefault(); pcaDropZone.classList.remove('dragover');
+    if (e.dataTransfer.files[0]) setPcaFile(e.dataTransfer.files[0]);
+  });
+  pcaFileInput.addEventListener('change', () => { if (pcaFileInput.files[0]) setPcaFile(pcaFileInput.files[0]); });
+
+  function setPcaFile(f) {
+    pcaFile = f;
+    const r = new FileReader();
+    r.onload = e => {
+      document.getElementById('pca-preview-img').src = e.target.result;
+      document.getElementById('pca-preview-wrap').classList.add('show');
+      pcaDropZone.classList.add('has-file');
+    };
+    r.readAsDataURL(f);
+    document.getElementById('btn-pca-compress').disabled = false;
+    // Reset hasil sebelumnya
+    document.getElementById('pca-results').classList.remove('show');
+    document.getElementById('pca-kmax-display').textContent = '—';
+  }
+
+  function resetPca() {
+    pcaFile = null;
+    pcaFileInput.value = '';
+    document.getElementById('pca-preview-img').src = '';
+    document.getElementById('pca-preview-wrap').classList.remove('show');
+    pcaDropZone.classList.remove('has-file', 'dragover');
+    document.getElementById('btn-pca-compress').disabled = true;
+    document.getElementById('pca-results').classList.remove('show');
+    document.getElementById('pca-loading').classList.remove('show');
+    document.getElementById('pca-kmax-display').textContent = '—';
+  }
+
+  // ─── PCA Compression JS ────────────────────────────────────────
+
+  function updateSliderGradient(slider) {
+    const val = parseInt(slider.value);
+    const max = parseInt(slider.max);
+    const pct = ((val - 1) / (max - 1)) * 100;
+    slider.style.setProperty('--slider-pct', pct.toFixed(1) + '%');
+  }
+
+  function onPcaSliderInput(slider) {
+    const k = parseInt(slider.value);
+    document.getElementById('pca-k-display').textContent = k;
+    updateSliderGradient(slider);
+    // Update active preset button
+    document.querySelectorAll('.preset-btn').forEach(b => {
+      const bk = parseInt(b.textContent.replace('k=', ''));
+      b.classList.toggle('active', bk === k);
+    });
+  }
+
+  function setPcaK(k) {
+    const slider = document.getElementById('pca-k-slider');
+    const clamped = Math.min(k, parseInt(slider.max));
+    slider.value = clamped;
+    document.getElementById('pca-k-display').textContent = clamped;
+    updateSliderGradient(slider);
+    document.querySelectorAll('.preset-btn').forEach(b => {
+      const bk = parseInt(b.textContent.replace('k=', ''));
+      b.classList.toggle('active', bk === clamped);
+    });
+  }
+
+  async function runPcaCompress() {
+    if (!pcaFile) return;
+    const k = parseInt(document.getElementById('pca-k-slider').value);
+    document.getElementById('pca-loading').classList.add('show');
+    document.getElementById('pca-results').classList.remove('show');
+    document.getElementById('btn-pca-compress').disabled = true;
+
+    const form = new FormData();
+    form.append('image', pcaFile);
+    form.append('k', k);
+
+    try {
+      const res = await fetch('/compress_pca', { method: 'POST', body: form });
+      const d = await res.json();
+      if (!res.ok || d.error) throw new Error(d.error || 'Server error');
+      renderPcaResults(d);
+    } catch(err) {
+      showToast(err.message);
+    } finally {
+      document.getElementById('pca-loading').classList.remove('show');
+      document.getElementById('btn-pca-compress').disabled = false;
+    }
+  }
+
+  function renderPcaResults(d) {
+    // Quality color coding
+    function qualityClass(metric, value) {
+      if (metric === 'psnr')  return value >= 35 ? 'good' : value >= 25 ? 'warn' : 'bad';
+      if (metric === 'ssim')  return value >= 0.9 ? 'good' : value >= 0.7 ? 'warn' : 'bad';
+      if (metric === 'mse')   return value <= 50  ? 'good' : value <= 300  ? 'warn' : 'bad';
+      if (metric === 'cr')    return value >= 2   ? 'good' : 'warn';
+      return '';
+    }
+
+    // MSE
+    document.getElementById('pca-val-mse').textContent = d.mse;
+    const mseCard = document.getElementById('pca-card-mse');
+    mseCard.className = 'pca-metric-card ' + qualityClass('mse', d.mse);
+
+    // PSNR
+    document.getElementById('pca-val-psnr').textContent = d.psnr + ' dB';
+    const psnrCard = document.getElementById('pca-card-psnr');
+    psnrCard.className = 'pca-metric-card ' + qualityClass('psnr', d.psnr);
+
+    // SSIM
+    document.getElementById('pca-val-ssim').textContent = d.ssim;
+    const ssimCard = document.getElementById('pca-card-ssim');
+    ssimCard.className = 'pca-metric-card ' + qualityClass('ssim', d.ssim);
+
+    // Compression Ratio
+    document.getElementById('pca-val-cr').textContent = d.compression_ratio + '×';
+    const crCard = document.getElementById('pca-card-cr');
+    crCard.className = 'pca-metric-card ' + qualityClass('cr', d.compression_ratio);
+
+    // k info
+    document.getElementById('pca-val-k').textContent = d.k_used;
+    document.getElementById('pca-val-kmax').textContent = d.k_max;
+    document.getElementById('pca-kmax-display').textContent = d.k_max;
+
+    // Explained Variance per channel
+    const ev = d.explained_variance_pct;
+    document.getElementById('pca-ev-r').textContent = ev[0].toFixed(1) + '%';
+    document.getElementById('pca-ev-g').textContent = ev[1].toFixed(1) + '%';
+    document.getElementById('pca-ev-b').textContent = ev[2].toFixed(1) + '%';
+
+    // Images
+    document.getElementById('pca-img-original').src = 'data:image/png;base64,' + d.original_b64;
+    document.getElementById('pca-img-compressed').src = 'data:image/png;base64,' + d.compressed_b64;
+    document.getElementById('pca-compressed-lbl').textContent =
+      (LANG[lang]['pca.compressed.lbl'] || 'Hasil Kompresi') + ' (k=' + d.k_used + ')';
+
+    // Variance chart
+    document.getElementById('pca-variance-chart').src = 'data:image/png;base64,' + d.variance_chart_b64;
+
+    document.getElementById('pca-results').classList.add('show');
+    document.getElementById('pca-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
 
   applyLang(lang);
   applyTheme(theme);
