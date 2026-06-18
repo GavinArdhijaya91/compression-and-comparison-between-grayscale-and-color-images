@@ -4,24 +4,24 @@
 [![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://comparison-between-grayscale-and-color-images-mrhss5zmjrckjzid.streamlit.app/)
 [![Deploy to Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/GavinArdhijaya91/comparison-between-grayscale-and-color-images)
 
-## 📖 Deskripsi
+## Deskripsi
 Aplikasi web interaktif berbasis Python yang digunakan untuk mengidentifikasi dan membandingkan gambar berwarna (RGB) dengan gambar skala abu-abu (Grayscale). Aplikasi ini dibangun dengan menerapkan konsep-konsep dasar **Aljabar Linear** (Linear Algebra) dan pengolahan citra digital untuk melakukan analisis matematis pada piksel gambar.
 
-## 🔬 Latar Belakang
+## Latar Belakang
 Setiap gambar digital pada dasarnya adalah representasi dari kumpulan angka yang disusun dalam bentuk **Matriks**. 
 - Gambar **Grayscale** adalah matriks 2 Dimensi dimana setiap elemen berisi nilai intensitas cahaya (0-255).
 - Gambar **RGB (Berwarna)** adalah matriks 3 Dimensi (Tensor) yang terdiri dari kombinasi vektor channel Merah (Red), Hijau (Green), dan Biru (Blue).
 
 Proyek ini dibangun untuk mendemonstrasikan secara visual dan matematis bagaimana operasi matriks dan vektor berperan penting dalam dunia komputasi visual.
 
-## 🎯 Tujuan
+## Tujuan
 1. Menerima input gambar dari pengguna (maksimal 10MB).
 2. Membaca dan mengekstrak nilai piksel matriks dari gambar yang diunggah.
 3. Mengklasifikasikan gambar menjadi `Colored Image` atau `Grayscale Image` berdasarkan perhitungan simpangan baku antar *channel* RGB.
 4. Menampilkan visualisasi data matematis berupa **RGB Histogram**.
 5. Menyediakan platform edukasi interaktif mengenai transformasi linear pada citra.
 
-## ⚙️ Cara Kerja Sistem
+## Cara Kerja Sistem
 1. **Ekstraksi Matriks**: Gambar yang diunggah dikonversi ke dalam bentuk array (matriks) NumPy.
 2. **Analisis Vektor RGB**: Sistem menghitung simpangan baku (Standard Deviation) untuk komponen Red, Green, dan Blue pada setiap piksel.
 3. **Persamaan Linear Grayscale**: Konversi standar grayscale menggunakan kombinasi linear berbobot:
@@ -32,7 +32,7 @@ Proyek ini dibangun untuk mendemonstrasikan secara visual dan matematis bagaiman
 
 ---
 
-## 🚀 Cara Clone & Menjalankan di Komputer Lokal
+## Cara Clone & Menjalankan di Komputer Lokal
 
 Proyek ini mendukung dua arsitektur berbeda: **Flask** (untuk UI Custom yang memukau) dan **Streamlit** (untuk kesederhanaan deployment). Keduanya memiliki fungsi backend yang identik.
 
@@ -66,17 +66,17 @@ Kamu bisa memilih salah satu dari dua cara di bawah ini:
 ```bash
 python app.py
 ```
-👉 Kemudian buka browser dan kunjungi: **http://127.0.0.1:5000**
+> Kemudian buka browser dan kunjungi: **http://127.0.0.1:5000**
 
 #### Opsi B: Menjalankan Versi Streamlit
 ```bash
 streamlit run streamlit_app.py
 ```
-👉 Halaman aplikasi akan otomatis terbuka di browser.
+> Halaman aplikasi akan otomatis terbuka di browser.
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 * **Python 3.10+** (OpenCV, NumPy, Pillow)
 * **Frontend Flask**: HTML5, Vanilla CSS3 (Glassmorphism UI), Vanilla JavaScript, Chart.js
 * **Frontend Streamlit**: Streamlit Native Widgets, Matplotlib
