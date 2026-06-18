@@ -199,8 +199,10 @@ const LANG = {
     }
   };
 
-  let lang = localStorage.getItem('lang') || 'ID';
-  let theme = localStorage.getItem('theme') || 'dark';
+  let lang = (localStorage.getItem('lang') || 'ID').toUpperCase();
+  if (lang !== 'ID' && lang !== 'EN') lang = 'ID';
+  let theme = (localStorage.getItem('theme') || 'dark').toLowerCase();
+  if (theme !== 'dark' && theme !== 'light') theme = 'dark';
   let currentFile = null;
   let analysisData = null;
   let matrixTab = 'R';
